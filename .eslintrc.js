@@ -1,4 +1,5 @@
 module.exports = {
+  'parser': 'babel-eslint',
   'env': {
     'browser': true,
     'commonjs': true,
@@ -8,7 +9,12 @@ module.exports = {
   'extends': 'eslint:recommended',
   'parserOptions': {
     'sourceType': 'module',
-    'ecmaVersion': 8
+    'ecmaVersion': 8,
+    'ecmaFeatures': {
+      'jsx': true,
+      'experimentalObjectRestSpread': true
+    },
+    'allowImportExportEverywhere': true
   },
   'rules': {
     'no-alert': 0,//禁止使用alert confirm prompt
@@ -39,7 +45,7 @@ module.exports = {
     'no-extra-bind': 2,//禁止不必要的函数绑定
     'no-extra-boolean-cast': 2,//禁止不必要的bool转换
     'no-extra-parens': 2,//禁止非必要的括号
-    'no-extra-semi': 2,//禁止多余的冒号
+    'no-extra-semi': 1,//禁止多余的冒号
     'no-fallthrough': 1,//禁止switch穿透
     'no-floating-decimal': 2,//禁止省略浮点数中的0 .5 3.
     'no-func-assign': 2,//禁止重复的函数声明
@@ -103,7 +109,7 @@ module.exports = {
     'no-unneeded-ternary': 2,//禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
     'no-unreachable': 2,//不能有无法执行的代码
     'no-unused-expressions': 2,//禁止无用的表达式
-    'no-unused-vars': [2, {'vars': 'all', 'args': 'none'}],//不能有声明后未被使用的变量或参数
+    'no-unused-vars': [0, {'vars': 'all', 'args': 'none'}],//不能有声明后未被使用的变量或参数
     'no-use-before-define': 2,//未定义前不能使用
     'no-useless-call': 2,//禁止不必要的call和apply
     'no-void': 2,//禁用void操作符
