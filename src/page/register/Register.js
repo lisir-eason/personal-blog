@@ -9,7 +9,7 @@ class RegisterPage extends React.Component {
   render() {
     return <React.Fragment>
       <div className='test'>
-        注册页面
+        注册页面 是的哦
       </div>
     </React.Fragment>
   }
