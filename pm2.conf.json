@@ -1,7 +1,7 @@
 {
     "apps": {
-        "name": "weibo",
-        "script": "bin/www",
+        "name": "my-blog",
+        "script": "server/bin/www",
         "watch": true,
         "ignore_watch": [
             "node_modules",
