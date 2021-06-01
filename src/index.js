@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import LwFirewords from 'lw_firewords'
 import 'antd/dist/antd.css'
 import 'animate.css'
+import './rewriteAntd.less'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
