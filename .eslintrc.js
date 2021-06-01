@@ -125,7 +125,6 @@ module.exports = {
     'brace-style': [1, '1tbs'],//大括号风格
     'callback-return': 0,//避免多次调用回调什么的
     'camelcase': 2,//强制驼峰法命名
-    'comma-dangle': [2, 'never'],//对象字面量项尾不能有逗号
     'comma-spacing': 0,//逗号前后的空格
     'comma-style': [2, 'last'],//逗号风格，换行时在行首还是行尾
     'complexity': [0, 11],//循环复杂度
@@ -167,7 +166,6 @@ module.exports = {
     'prefer-spread': 0,//首选展开运算
     'prefer-reflect': 0,//首选Reflect的方法
     'quotes': [1, 'single'],//引号类型 `` "" ''
-    'quote-props':[2, 'always'],//对象字面量中的属性名是否强制双引号
     'radix': 2,//parseInt必须指定第二个参数
     'id-match': 0,//命名检测
     'require-yield': 0,//生成器函数必须有yield

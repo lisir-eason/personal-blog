@@ -1,23 +1,19 @@
-import logo from '../../static/logo.svg'
-import './Home.css'
+import { useState } from 'react'
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
 
-function HomePage() {
+import './Home.less'
+
+
+const HomePage = () => {
+  const [isLogin, setIsLogin] = useState(true)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-box">
+      <div className={ isLogin ? 'login-form-box' : 'login-form-box turn-form-box-left'}>
+        <LoginForm setIsLogin={setIsLogin} />
+        <RegisterForm setIsLogin={setIsLogin} />
+      </div>
     </div>
   )
 }

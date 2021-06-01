@@ -1,8 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+import LwFirewords from 'lw_firewords'
+import 'antd/dist/antd.css'
+import 'animate.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+
+const lwf = new LwFirewords()
+lwf.init()
 
 ReactDOM.render(
   <React.StrictMode>
