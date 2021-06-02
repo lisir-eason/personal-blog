@@ -62,7 +62,7 @@ const RegisterForm = ({
         <Button type="primary" htmlType="submit" className="login-form-button">
           注册
         </Button>
-        或者 <Button type="link" className="register-btn" onClick={() => setIsLogin(true)}>去登录!</Button>
+        已有账号? <Button type="link" className="register-btn" onClick={() => setIsLogin(true)}>去登录!</Button>
       </Form.Item>
     </Form>
   )
