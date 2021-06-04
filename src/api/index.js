@@ -12,8 +12,8 @@ export const login = (params) => {
   return api.post('/users/login', params)
 }
 
-export const isLogin = () => {
-  return api.post('/users/isLogin')
+export const getCurrentUser = () => {
+  return api.post('/users/currentUser')
 }
 
 export const logout = () => {

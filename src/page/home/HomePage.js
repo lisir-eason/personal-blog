@@ -11,7 +11,7 @@ const HomePage = () => {
     <React.Fragment>
       <Header active="home" />
       <div className='content-container'>
-        <h1 className="animate__fadeIn">首页哦</h1>
+        homepage
       </div>
     </React.Fragment>
   )

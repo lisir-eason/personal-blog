@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const { isExist, register, login, logout} = require('../controller/user')
+const { isExist, register, login, logout, getCurrentUserInfo} = require('../controller/user')
 const genValidate = require('../middlewares/validate')
 const loginCheck = require('../middlewares/loginCheck')
 const userValidate = require('../validator/user')
@@ -30,8 +30,8 @@ router.post('/logout', async function (ctx, next) {
   ctx.body = await logout(ctx)
 })
 
-router.post('/isLogin', loginCheck, async function (ctx, next) {
-  ctx.body = {errno: 0, message: '已登录'}
+router.post('/currentUser', loginCheck, async function (ctx, next) {
+  ctx.body = await getCurrentUserInfo(ctx)
 })
 
 module.exports = router

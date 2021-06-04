@@ -51,9 +51,17 @@ async function logout(ctx) {
   }
 }
 
+async function getCurrentUserInfo(ctx) {
+  const {userInfo} = ctx.session
+  if (userInfo) {
+    return new SuccessModal({data: userInfo})
+  }
+}
+
 module.exports = {
   isExist,
   register,
   login,
   logout,
+  getCurrentUserInfo,
 }

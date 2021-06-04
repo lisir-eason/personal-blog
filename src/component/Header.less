@@ -1,3 +1,9 @@
+.header-container{
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
 .header-box{
   position: relative;
   z-index: 100;
@@ -52,16 +58,15 @@
   }
 }
 
-.edit-icon{
-  font-size: 16px;
-  position: absolute;
-  right: 46px;
-  cursor: pointer;
-}
-
-.logout-icon{
-  font-size: 16px;
+.menu-box{
   position: absolute;
   right: 16px;
-  cursor: pointer;
+  font-size: 18px;
+  color: #8590a6;
+  svg{
+    cursor: pointer;
+    &:hover{
+      color: #121212;
+    }
+  }
 }
