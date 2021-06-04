@@ -1,0 +1,67 @@
+.header-box{
+  position: relative;
+  z-index: 100;
+  min-width: 1000px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
+  .header-inner {
+    position: relative;
+    display: flex;
+    height: 52px;
+    width: auto;
+    max-width: 1156px;
+    min-width: 1000px;
+    padding: 0 16px;
+    margin: 0 auto;
+    align-items: center;
+  }
+}
+.nav-box {
+  display: flex;
+  margin: 0 16px;
+  .nav-item {
+    display: inline-block;
+    padding: 0 15px;
+    list-style-type: none;
+    a{
+      position: relative;
+      display: inline-block;
+      padding: 14px 0;
+      font-size: 15px;
+      color: #8590a6;
+      text-align: center;
+      line-height: 22px;
+      &:hover{
+        color: #121212;
+      }
+    }
+    .is-active{
+      font-weight: 600;
+      color: #121212;
+      &::after{
+        position: absolute;
+        height: 4px;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        background-color: #06f;
+        content: '';
+      }
+    }
+  }
+}
+
+.edit-icon{
+  font-size: 16px;
+  position: absolute;
+  right: 46px;
+  cursor: pointer;
+}
+
+.logout-icon{
+  font-size: 16px;
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+}

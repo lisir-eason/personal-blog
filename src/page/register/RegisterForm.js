@@ -38,11 +38,9 @@ const RegisterForm = ({
 
   return (
     <Form
-      name="normal_login"
       className="login-form login-form-right"
     >
       <Form.Item
-        name="username"
         rules={[
           {
             required: true,
@@ -70,10 +68,10 @@ const RegisterForm = ({
           onChange={(e) => {
             setUserName(e.target.value)
           }}
+          name='username'
         />
       </Form.Item>
       <Form.Item
-        name="password"
         rules={[
           {
             required: true,
@@ -91,21 +89,20 @@ const RegisterForm = ({
         />
       </Form.Item>
       <Form.Item
-        name="rePassword"
         rules={[
           {
             required: true,
             message: '请确认密码!',
           },
         ]}
-        onChange={e => {
-          setRePassword(e.target.value)
-        }}
       >
         <Input
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="确认密码"
+          onChange={e => {
+            setRePassword(e.target.value)
+          }}
         />
       </Form.Item>
       <Form.Item>

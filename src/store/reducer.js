@@ -3,7 +3,8 @@ const defaultState = {
   register: {
     userName: '',
     password: ''
-  }
+  },
+  userInfo: null,
 }
 
 export default (state = defaultState, action)=>{
@@ -11,8 +12,8 @@ export default (state = defaultState, action)=>{
   case 'set_register_info':
     state.register = {...action.payload}
     break
-  case 'delete':
-    state = {value: state.value - 1}
+  case 'set_user_info':
+    state.userInfo = {...action.payload}
     break
   default:
     break

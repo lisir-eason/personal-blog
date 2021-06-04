@@ -1,9 +1,11 @@
 import axios from 'axios'
+import {message} from 'antd'
 
 let baseUrl
 
 if (process.env.NODE_ENV === 'development') {
-  baseUrl = 'http://localhost:3001'
+  // baseUrl = 'http://localhost:3001'
+  baseUrl = ''
 }
 
 const api = axios.create({
@@ -25,6 +27,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     if (response.status === 200) {
+      if (response.data.errno === 10007) {
+        const pathname = window.location.pathname
+        window.location.href= `/?url=${encodeURIComponent(pathname)}`
+      }
       return Promise.resolve(response)
     }
     return Promise.reject(response)

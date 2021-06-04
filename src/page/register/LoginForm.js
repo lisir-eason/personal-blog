@@ -1,30 +1,53 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import { Form, Input, Button, Checkbox, message } from 'antd'
+import url from 'fast-url-parser'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import {withRouter} from 'react-router-dom'
+import {login} from '../../api/index'
 
 const LoginForm = ({
-  setIsLogin,
+  setIsLogin, history,
 }) => {
-
   const [remember, setRemember] = useState(true)
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
   const register = useSelector(state => state.register)
+  const dispatch = useDispatch()
 
+
+  useEffect(() => {
+    setUserName(register.userName)
+    setPassword(register.password)
+    return () => {}
+  }, [register])
   const onForgetPasswordClick = (e) => {
     e.preventDefault()
     message.error('还没有实现该功能！')
   }
   const onLogin = () => {
-    //TODO: 当记住我的时候把cookie存到浏览器
+    const params = {
+      userName,
+      password
+    }
+    login(params).then(res => {
+      dispatch({type: 'set_user_info', payload: res.data.data})
+      const parsed = url.parse(window.location.href, true)
+      if (parsed.query.url) {
+        history.push({pathname: parsed.query.url})
+        return
+      }
+      history.push({pathname: `/profile/${userName}`})
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   return (
     <Form
-      name="normal_login"
       className="login-form login-form-before"
     >
       <Form.Item
-        name="username"
         rules={[
           {
             required: true,
@@ -32,10 +55,15 @@ const LoginForm = ({
           },
         ]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon"/>}
+          placeholder="用户名"
+          onChange={(e) => {
+            setUserName(e.target.value)
+          }}
+          value={userName}/>
       </Form.Item>
       <Form.Item
-        name="password"
         rules={[
           {
             required: true,
@@ -47,10 +75,14 @@ const LoginForm = ({
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="密  码"
+          onChange={e=> {
+            setPassword(e.target.value)
+          }}
+          value={password}
         />
       </Form.Item>
       <Form.Item>
-        <Form.Item name="remember" noStyle>
+        <Form.Item noStyle>
           <Checkbox checked={remember} onChange={e => setRemember(e.target.checked)}>记住我</Checkbox>
         </Form.Item>
         <a className="login-form-forgot" href="" onClick={onForgetPasswordClick}>
@@ -68,4 +100,4 @@ const LoginForm = ({
   )
 }
 
-export default LoginForm
+export default withRouter(LoginForm)

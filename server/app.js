@@ -5,10 +5,11 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const cors = require('koa2-cors')
+const session = require('koa-session')
+
 const index = require('./routes/index')
 const users = require('./routes/users')
-var cors = require('koa2-cors')
-
 // error handler
 onerror(app)
 
@@ -24,6 +25,22 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   'extension': 'pug'
 }))
+
+app.keys = ['session-keys*li@ea']
+const CONFIG = {
+  key: 'koa.blog',
+  maxAge: 7 * 24 *60 *60 * 1000,
+  autoCommit: true,
+  overwrite: true,
+  httpOnly: true,
+  signed: true,
+  rolling: false,
+  renew: false,
+  secure: false,
+  sameSite: null,
+}
+
+app.use(session(CONFIG, app))
 
 // logger
 app.use(async (ctx, next) => {

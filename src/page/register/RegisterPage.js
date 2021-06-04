@@ -2,10 +2,10 @@ import { useState } from 'react'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
-import './Home.less'
+import './RegisterPage.less'
 
 
-const HomePage = () => {
+const RegisterPage = () => {
   const [isLogin, setIsLogin] = useState(true)
 
   return (
@@ -18,4 +18,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default RegisterPage

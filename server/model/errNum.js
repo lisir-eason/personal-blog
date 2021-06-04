@@ -22,5 +22,13 @@ module.exports = {
   paramsError: {
     errno: 10005,
     message: '参数不正确'
+  },
+  passwordOrUserNameError: {
+    errno: 10006,
+    message: '用户名或者密码不正确'
+  },
+  notLogin: {
+    errno: 10007,
+    message: '没有登陆！'
   }
 }

@@ -3,7 +3,12 @@
  */
 
 const { getUserInfo, createUser } = require('../services/user')
-const { userIsNotExist, userIsExist, createUserFailed } = require('../model/errNum')
+const {
+  userIsNotExist,
+  userIsExist,
+  createUserFailed,
+  passwordOrUserNameError
+} = require('../model/errNum')
 const { SuccessModal, ErrorModal } = require('../model/resModal')
 
 async function isExist ({userName}) {
@@ -28,7 +33,27 @@ async function register({userName, password}) {
   }
 }
 
+async function login({userName, password, ctx}) {
+  const userInfo = await getUserInfo({userName, password})
+  if (userInfo) {
+    ctx.session.userInfo = userInfo
+    return new SuccessModal({data: userInfo})
+  }
+  return new ErrorModal(passwordOrUserNameError)
+}
+
+async function logout(ctx) {
+  try {
+    ctx.session = null
+    return new SuccessModal({data: {}})
+  } catch (error) {
+    console.error(error.message, error.stack)
+  }
+}
+
 module.exports = {
   isExist,
   register,
+  login,
+  logout,
 }
