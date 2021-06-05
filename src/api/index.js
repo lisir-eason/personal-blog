@@ -19,3 +19,11 @@ export const getCurrentUser = () => {
 export const logout = () => {
   return api.post('/users/logout')
 }
+
+export const updateUserInfo = (params) => {
+  return api.post('/users/updateUserInfo', params)
+}
+
+export const changePassword = (params) => {
+  return api.post('/users/changePassword', params)
+}

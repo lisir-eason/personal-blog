@@ -31,8 +31,15 @@ async function createUser({userName, password}) {
   return user.dataValues
 }
 
+async function updateUser(newData, where) {
+  const result = await User.update(newData, {where})
+
+  return result[0] > 0
+}
+
 
 module.exports = {
   getUserInfo,
   createUser,
+  updateUser,
 }

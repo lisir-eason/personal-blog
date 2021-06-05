@@ -10,7 +10,13 @@ const { database, user, password, host, dialect, port } = DB_CONF
 const sequelize = new Sequelize( database, user, password, {
   host,
   dialect,
-  port
+  port,
+  define: {
+    charset: 'utf8',
+    dialectOptions: {
+      collate: 'utf8_general_ci'
+    }
+  }
 })
 
 module.exports = {

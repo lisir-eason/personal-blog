@@ -30,5 +30,13 @@ module.exports = {
   notLogin: {
     errno: 10007,
     message: '没有登陆！'
+  },
+  updateUserInfoError: {
+    errno: 10008,
+    message: '更新用户信息失败！'
+  },
+  changePasswordError: {
+    errno: 10009,
+    message: '原密码错误！'
   }
 }

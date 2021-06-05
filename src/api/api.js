@@ -27,11 +27,15 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     if (response.status === 200) {
-      if (response.data.errno === 10007) {
+      if (response.data.errno === 0) {
+        return Promise.resolve(response)
+      } else if ( response.data.errno === 10007) {
         const pathname = window.location.pathname
         window.location.href= `/?url=${encodeURIComponent(pathname)}`
+      } else {
+        message.error(response.data.message)
+        return Promise.reject(response)
       }
-      return Promise.resolve(response)
     }
     return Promise.reject(response)
   },

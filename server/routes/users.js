@@ -1,5 +1,6 @@
 const router = require('koa-router')()
-const { isExist, register, login, logout, getCurrentUserInfo} = require('../controller/user')
+const { isExist, register, login, logout,
+  getCurrentUserInfo, changeUserInfo, changePassword} = require('../controller/user')
 const genValidate = require('../middlewares/validate')
 const loginCheck = require('../middlewares/loginCheck')
 const userValidate = require('../validator/user')
@@ -32,6 +33,20 @@ router.post('/logout', async function (ctx, next) {
 
 router.post('/currentUser', loginCheck, async function (ctx, next) {
   ctx.body = await getCurrentUserInfo(ctx)
+})
+
+router.post('/updateUserInfo', loginCheck, async (ctx, next) => {
+  const {nickName, gender, city, picture} = ctx.request.body
+  ctx.body = await changeUserInfo(ctx, {nickName, gender, city, picture})
+})
+
+router.post('/changePassword', loginCheck, async (ctx, next) => {
+  const {password, newPassword} = ctx.request.body
+  ctx.body = await changePassword(ctx,
+    {
+      password: encryptFn(password),
+      newPassword: encryptFn(newPassword)
+    })
 })
 
 module.exports = router
