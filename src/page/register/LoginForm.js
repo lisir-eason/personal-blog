@@ -10,34 +10,36 @@ const LoginForm = ({
   setIsLogin, history,
 }) => {
   const [remember, setRemember] = useState(true)
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
   const register = useSelector(state => state.register)
+  const [form] = Form.useForm()
   const dispatch = useDispatch()
 
-
   useEffect(() => {
-    setUserName(register.userName)
-    setPassword(register.password)
-    return () => {}
+    form.setFieldsValue(register)
   }, [register])
   const onForgetPasswordClick = (e) => {
     e.preventDefault()
     message.error('还没有实现该功能！')
   }
-  const onLogin = () => {
+
+  const onFinish = (values) => {
+    const {userName, password,} = values
     const params = {
       userName,
       password
     }
     login(params).then(res => {
-      dispatch({type: 'set_user_info', payload: res.data.data})
-      const parsed = url.parse(window.location.href, true)
-      if (parsed.query.url) {
-        history.push({pathname: parsed.query.url})
-        return
+      if (res.data.errno === 0) {
+        dispatch({type: 'set_user_info', payload: res.data.data})
+        const parsed = url.parse(window.location.href, true)
+        if (parsed.query.url) {
+          history.push({pathname: parsed.query.url})
+          return
+        }
+        history.push({pathname: `/profile/${userName}`})
+      } else {
+        message.error(res.data.message)
       }
-      history.push({pathname: `/profile/${userName}`})
     }).catch(err => {
       console.log(err)
     })
@@ -45,9 +47,15 @@ const LoginForm = ({
 
   return (
     <Form
+      name='login-form'
       className="login-form login-form-before"
+      validateTrigger='onBlur'
+      initialValues={register}
+      form={form}
+      onFinish={onFinish}
     >
       <Form.Item
+        name='userName'
         rules={[
           {
             required: true,
@@ -58,12 +66,10 @@ const LoginForm = ({
         <Input
           prefix={<UserOutlined className="site-form-item-icon"/>}
           placeholder="用户名"
-          onChange={(e) => {
-            setUserName(e.target.value)
-          }}
-          value={userName}/>
+        />
       </Form.Item>
       <Form.Item
+        name='password'
         rules={[
           {
             required: true,
@@ -75,10 +81,6 @@ const LoginForm = ({
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="密  码"
-          onChange={e=> {
-            setPassword(e.target.value)
-          }}
-          value={password}
         />
       </Form.Item>
       <Form.Item>
@@ -91,7 +93,7 @@ const LoginForm = ({
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" className="login-form-button" onClick={onLogin}>
+        <Button type="primary" className="login-form-button" htmlType="submit">
           登录
         </Button>
         或者 <Button type="link" className="register-btn" onClick={() => setIsLogin(false)}>去注册!</Button>

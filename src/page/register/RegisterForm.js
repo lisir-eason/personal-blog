@@ -8,12 +8,10 @@ import {register, isUserExit} from '../../api/index'
 const RegisterForm = ({
   setIsLogin
 }) => {
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
-  const [rePassword, setRePassword] = useState('')
-  const dispatch = useDispatch()
 
-  const handelRegister = () => {
+  const dispatch = useDispatch()
+  const onFinish = (values) => {
+    const {userName, password, rePassword} = values
     const params = {
       userName,
       password
@@ -38,9 +36,13 @@ const RegisterForm = ({
 
   return (
     <Form
+      name='register-form'
       className="login-form login-form-right"
+      validateTrigger='onBlur'
+      onFinish={onFinish}
     >
       <Form.Item
+        name='userName'
         rules={[
           {
             required: true,
@@ -65,13 +67,10 @@ const RegisterForm = ({
       >
         <Input prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
-          onChange={(e) => {
-            setUserName(e.target.value)
-          }}
-          name='username'
         />
       </Form.Item>
       <Form.Item
+        name='password'
         rules={[
           {
             required: true,
@@ -83,12 +82,10 @@ const RegisterForm = ({
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="密  码"
-          onChange={e => {
-            setPassword(e.target.value)
-          }}
         />
       </Form.Item>
       <Form.Item
+        name='rePassword'
         rules={[
           {
             required: true,
@@ -100,13 +97,10 @@ const RegisterForm = ({
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="确认密码"
-          onChange={e => {
-            setRePassword(e.target.value)
-          }}
         />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" className="login-form-button" onClick={handelRegister}>
+        <Button type="primary" htmlType="submit" className="login-form-button">
           注册
         </Button>
         已有账号? <Button type="link" className="register-btn" onClick={() => setIsLogin(true)}>去登录!</Button>

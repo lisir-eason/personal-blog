@@ -13,43 +13,29 @@ const SettingPage = () => {
     { label: '女', value: 2 },
     { label: '保密', value: 3,},
   ]
-  const [userName, setUserName] = useState()
-  const [nickName, setNickName] = useState()
-  const [gender, setGender] = useState()
-  const [city, setCity] = useState()
-  const [picture, setPicture] = useState()
+
   const userInfo = useSelector(state => state.userInfo)
   const [fileList, setFileList] = useState([])
+  const [form] = Form.useForm()
   const onChange = ({ fileList: newFileList }) => {
     if (newFileList.length && newFileList[0].status === 'done') {
       const file = newFileList[0]
-      setPicture(file.response.data.url)
+      form.setFieldsValue({picture: file.response.data.url})
       setFileList([{...file, url: file.response.data.url}])
       return
     }
     if (!newFileList.length) {
-      setPicture(userInfo.picture)
+      form.setFieldsValue({picture: userInfo.picture})
     }
     setFileList(newFileList)
   }
-  const handleUpdateUser = () => {
-    const params = {
-      userName,
-      nickName,
-      gender,
-      city,
-      picture
-    }
-    console.log(params)
+  const onFinish = (values) => {
+    console.log(values)
   }
 
   useEffect(() => {
     if (userInfo) {
-      setUserName( userInfo.userName)
-      setNickName(userInfo.nickName)
-      setGender(userInfo.gender)
-      setCity(userInfo.city)
-      setPicture(userInfo.picture)
+      form.setFieldsValue(userInfo)
       setFileList([{uid: '-1', status: 'done', url: userInfo.picture,}])
     }
   }, [userInfo])
@@ -58,9 +44,10 @@ const SettingPage = () => {
     <div>
       <Header active='setting' />
       <div className='content-container'>
-        <Form {...layout}>
+        <Form {...layout} form={form} onFinish={onFinish}>
           <Form.Item
             label="用户名"
+            name='userName'
             rules={[
               {
                 required: true,
@@ -68,13 +55,11 @@ const SettingPage = () => {
               },
             ]}
           >
-            <Input value={userName}
-              onChange={e => {
-                setUserName(e.target.value)
-              }}/>
+            <Input />
           </Form.Item>
           <Form.Item
             label="昵称"
+            name='nickName'
             rules={[
               {
                 required: true,
@@ -82,19 +67,14 @@ const SettingPage = () => {
               },
             ]}
           >
-            <Input value={nickName}
-              onChange={e => {
-                setNickName(e.target.value)
-              }}/>
+            <Input />
           </Form.Item>
           <Form.Item
-            label='性别'>
+            label='性别'
+            name='gender'
+          >
             <Radio.Group
               options={options}
-              onChange={(e) => {
-                setGender(e.target.value)
-              }}
-              value={gender}
               optionType="button"
               buttonStyle="solid"
             />
@@ -103,11 +83,7 @@ const SettingPage = () => {
             label="城市"
             name="city"
           >
-            <Input value={city}
-              onChange={e => {
-                setCity(e.target.value)
-              }}
-            />
+            <Input />
           </Form.Item>
           <Form.Item
             label="头像"
@@ -126,7 +102,7 @@ const SettingPage = () => {
             </ImgCrop>
           </Form.Item>
           <Form.Item {...tailLayout}>
-            <Button type="primary" onClick={handleUpdateUser}>
+            <Button type="primary" htmlType="submit">
               提交
             </Button>
             <Button className='change-password-btn' danger>
