@@ -7,14 +7,22 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const cors = require('koa2-cors')
 const session = require('koa-session')
+const koaBody = require('koa-body')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+const utils = require('./routes/utils')
 // error handler
 onerror(app)
 
 // middlewares
 app.use(cors())
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    maxFileSize: 2*1024*1024 // 设置上传文件大小最大限制，默认2M
+  }
+}))
 app.use(bodyparser({
   'enableTypes':['json', 'form', 'text']
 }))
@@ -53,6 +61,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(utils.routes(), utils.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

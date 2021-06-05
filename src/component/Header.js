@@ -19,13 +19,12 @@ const Header = ({
   }
 
   const userInfo = useSelector(state => state.userInfo)
-  let userName = userInfo && userInfo.userName
 
   return (
     <div className='header-container'>
       <header className="header-box">
         <div className="header-inner">
-          <Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+          <Avatar size="large" src={userInfo && userInfo.picture} />
           <ul className="nav-box">
             <li className="nav-item">
               <Link to={'/home'} className={active === 'home' ? 'is-active' : ''}>首页</Link>
@@ -34,7 +33,7 @@ const Header = ({
               <Link to={'/square'} className={active === 'square' ? 'is-active' : ''}>关注</Link>
             </li>
             <li className="nav-item">
-              <Link to ={`/profile/${userName}`} className={active === 'profile' ? 'is-active' : ''}>个人主页</Link>
+              <Link to ={`/profile/${userInfo && userInfo.userName}`} className={active === 'profile' ? 'is-active' : ''}>个人主页</Link>
             </li>
             <li className="nav-item">
               <Link to ={'/setting'} className={active === 'setting' ? 'is-active' : ''}>设置</Link>
