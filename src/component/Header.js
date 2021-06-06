@@ -40,8 +40,12 @@ const Header = ({
             </li>
           </ul>
           <Space split={<Divider type="vertical" />} className='menu-box'>
+            <span className='welcome-span'>欢迎您！{userInfo && userInfo.nickName}</span>
+            {active === 'edit' ? <Button type="primary">发布</Button>: null}
             <Tooltip title="去创作！">
-              <EditFilled />
+              <EditFilled className={active === 'edit' ? 'active-icon' : ''} onClick={() => {
+                history.push('/edit')
+              }}/>
             </Tooltip>
             <Tooltip title="登出">
               <LogoutOutlined onClick={onLogout} />

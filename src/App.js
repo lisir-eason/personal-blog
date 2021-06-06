@@ -9,6 +9,7 @@ import ProfilePage from './page/profile/ProfilePage'
 import SquarePage from './page/square/SquarePage'
 import NotFoundPage from './page/notFound/NotFoundPage'
 import SettingPage from './page/setting/SettingPage'
+import EditPage from './page/edit/EditPage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -25,6 +26,7 @@ const App = () => {
         <Route exact path='/home' component={HomePage}></Route>
         <Route exact path='/square' component={SquarePage}></Route>
         <Route exact path='/setting' component={SettingPage}></Route>
+        <Route exact path='/edit' component={EditPage}></Route>
         <Route exact path='*' component={NotFoundPage}></Route>
       </Switch>
     </BrowserRouter>
