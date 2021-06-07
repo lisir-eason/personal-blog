@@ -1,14 +1,21 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect,} from 'react'
 import Header from '../../component/Header'
 import BraftEditor from 'braft-editor'
-import {Modal,Form, Input, Button} from 'antd'
+import {useDispatch, useSelector} from 'react-redux'
+import {Modal,Form, Input,} from 'antd'
 import ReactHtmlParser from 'react-html-parser'
+import Tags from '../../component/Tags'
+import { CheckCircleTwoTone, ExclamationCircleTwoTone } from '@ant-design/icons'
 import 'braft-editor/dist/index.css'
 import 'braft-editor/dist/output.css'
+import './EditPage.less'
 
 const EditPage = () => {
-  const [editorState, setEditorState] = useState(BraftEditor.createEditorState(null))
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const editorInfo = useSelector(state => state.editorInfo)
+  const {title, tags, rawContent, isSave} = editorInfo
+  const [editorState, setEditorState] = useState(BraftEditor.createEditorState(rawContent))
+  const dispatch = useDispatch()
   const controls = [
     'undo', 'redo', 'separator',
     'headings','text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
@@ -20,6 +27,12 @@ const EditPage = () => {
   const preview = () => {
     setIsModalVisible(true)
   }
+  const setTags = (tag) => {
+    dispatch({type: 'set_editor_info', payload: {tags: tag}})
+  }
+  const setIsSave = (flag) => {
+    dispatch({type: 'set_editor_info', payload: {isSave: flag}})
+  }
   const extendControls = [
     {
       key: 'custom-button',
@@ -28,6 +41,11 @@ const EditPage = () => {
       onClick: preview
     }
   ]
+  const modalTitle =
+    <div>
+      <span className='modal-title'>{title ? title : '请输入标题'}</span>
+      <Tags tags={tags} readonly/>
+    </div>
 
   useEffect(() => {
     // const htmlContent = await fetchEditorContent()
@@ -35,33 +53,37 @@ const EditPage = () => {
   }, [])
 
   const handleEditorChange = (state) => {
+    setIsSave(false)
     setEditorState(state)
-  }
-
-  const submitContent = async () => {
-    const htmlContent = editorState.toHTML()
-    // const result = await saveEditorContent(htmlContent)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
-  const handleSubmit = () => {
-
+  const submitContent = async () => {
+    const htmlContent = editorState.toHTML()
+    const raw = editorState.toRAW()
+    setIsSave(true)
+    dispatch({type: 'set_editor_info', payload: {htmlContent, rawContent: raw}})
   }
+
 
   return (
     <div>
       <Header active='edit' />
       <div className='content-container'>
         <div className="my-component">
-          <Form onSubmit={handleSubmit} layout='inline'>
+          <Form layout='inline'>
             <Form.Item label="文章标题" >
-              <Input placeholder="请输入标题" style={{width: '200px'}}/>
+              <Input placeholder="请输入标题" style={{width: '200px'}}
+                value={editorInfo.title}
+                onChange={e => {
+                  dispatch({type: 'set_editor_info', payload: {title: e.target.value}})
+                }}/>
             </Form.Item>
             <Form.Item label="文章标签" >
-              <Input placeholder="请输入标签"/>
+              <Tags tags={tags} setTags={setTags}/>
             </Form.Item>
           </Form>
           <BraftEditor
@@ -70,20 +92,25 @@ const EditPage = () => {
             onSave={submitContent}
             controls={controls}
             extendControls={extendControls}
-            contentStyle={{minHeight: 'calc(100vh - 140px)'}}
+            contentStyle={{minHeight: 'calc(100vh - 170px)'}}
           />
         </div>
       </div>
       <Modal
-        title="预览"
+        title={modalTitle}
         style={{ top: 52 }}
         onCancel={handleCancel}
         visible={isModalVisible}
         footer ={null}
         width={1000}
       >
-        <div class="braft-output-content">{editorState && ReactHtmlParser(editorState.toHTML())}</div>
+        <div className="braft-output-content">{editorState && ReactHtmlParser(editorState.toHTML())}</div>
       </Modal>
+      {
+        isSave ?
+          <div className='editor-status-box'><CheckCircleTwoTone twoToneColor="#52c41a" />已保存</div>:
+          <div className='editor-status-box'><ExclamationCircleTwoTone twoToneColor="#F5222D"/>未保存</div>
+      }
     </div>
   )
 }
