@@ -57,10 +57,9 @@ const RegisterForm = ({
                     if (res.data.data) {
                       return Promise.reject(new Error('用户名已存在！'))
                     }
-                    return Promise.resolve()
+                    return Promise.resolve(null)
                   })
               }
-              return Promise.resolve()
             }
           },
         ]}

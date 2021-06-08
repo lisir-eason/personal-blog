@@ -29,7 +29,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     if (response.status === 200) {
-      if (response.data.errno === 0) {
+      if (response.data.errno === 0 || response.data.errno === 10001) {
         return Promise.resolve(response)
       } else if ( response.data.errno === 10007) {
         const pathname = window.location.pathname
