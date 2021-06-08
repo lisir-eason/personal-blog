@@ -38,5 +38,9 @@ module.exports = {
   changePasswordError: {
     errno: 10009,
     message: '原密码错误！'
+  },
+  createBlogFailed: {
+    errno: 10010,
+    message: '创建博客失败！'
   }
 }

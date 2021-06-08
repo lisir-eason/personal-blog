@@ -13,7 +13,7 @@ async function getUserInfo({userName, password}) {
 
   const user = await User.findOne({
     where,
-    attributes: ['userName', 'nickName', 'gender', 'picture', 'city']
+    attributes: ['id', 'userName', 'nickName', 'gender', 'picture', 'city']
   })
 
   if (!user) {

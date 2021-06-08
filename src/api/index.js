@@ -27,3 +27,7 @@ export const updateUserInfo = (params) => {
 export const changePassword = (params) => {
   return api.post('/users/changePassword', params)
 }
+
+export const createNewBlog = (params) => {
+  return api.post('/blogs/createBlog', params)
+}

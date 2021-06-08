@@ -53,8 +53,11 @@ const EditPage = () => {
   }, [])
 
   const handleEditorChange = (state) => {
-    setIsSave(false)
     setEditorState(state)
+    const raw = state.toRAW()
+    if (raw !== rawContent) {
+      setIsSave(false)
+    }
   }
 
   const handleCancel = () => {

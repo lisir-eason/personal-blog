@@ -1,15 +1,19 @@
 import {useState, useEffect} from 'react'
-import {Avatar, Button, Tooltip, Space, Typography, Divider} from 'antd'
+import {Avatar, Button, Tooltip, Space, Typography, Divider, message} from 'antd'
 import { EditFilled, LogoutOutlined} from '@ant-design/icons'
 import {useSelector} from 'react-redux'
 import {Link, withRouter} from 'react-router-dom'
-import {logout} from '../api/index'
+import {logout, createNewBlog} from '../api/index'
 import './Header.less'
 
 
 const Header = ({
   active, history
 }) => {
+  const userInfo = useSelector(state => state.userInfo)
+  const editorInfo = useSelector(state => state.editorInfo)
+  const {title, tags, rawContent, htmlContent, isSave} = editorInfo
+
   const onLogout = () => {
     logout().then(res=> {
       if (res.data.errno === 0) {
@@ -17,8 +21,31 @@ const Header = ({
       }
     })
   }
+  const postBlog = () => {
+    if (!isSave) {
+      message.error('请先按ctrl+s保存后再点击发布！')
+      return
+    }
+    if (!title) {
+      message.error('博客标题不能为空！')
+      return
+    }
+    if (!tags) {
+      message.error('博客标签不能为空！')
+      return
+    }
+    if (!rawContent) {
+      message.error('博客内容不能为空！')
+      return
+    }
+    const params = {
+      title, tags, rawContent, htmlContent,
+    }
+    createNewBlog(params).then(res => {
+      message.success('发布成功！')
+    })
+  }
 
-  const userInfo = useSelector(state => state.userInfo)
 
   return (
     <div className='header-container'>
@@ -41,7 +68,7 @@ const Header = ({
           </ul>
           <Space split={<Divider type="vertical" />} className='menu-box'>
             <span className='welcome-span'>欢迎您！{userInfo && userInfo.nickName}</span>
-            {active === 'edit' ? <Button type="primary">发布</Button>: null}
+            {active === 'edit' ? <Button type="primary" onClick={postBlog}>发布</Button>: null}
             <Tooltip title="去创作！">
               <EditFilled className={active === 'edit' ? 'active-icon' : ''} onClick={() => {
                 history.push('/edit')
