@@ -16,7 +16,7 @@ async function uploadFile(ctx, file) {
   if (isDev) {
     picBaseUrl = 'http://localhost:3001'
   } else if (isProd) {
-    picBaseUrl = 'http://www.lisireason.xyz:3001/'
+    picBaseUrl = 'http://www.lisireason.xyz:3001'
   }
 
   return new SuccessModal({data: {url: `${picBaseUrl}/upload/${newFilename}`}})
