@@ -24,6 +24,14 @@ const SettingPage = () => {
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const { confirm } = Modal
+  let actionUrl
+
+  if (process.env.NODE_ENV === 'development') {
+    // baseUrl = 'http://localhost:3001'
+    actionUrl = '/utils/upload'
+  } else {
+    actionUrl = '/apis/utils/upload'
+  }
 
   useEffect(() => {
     if (userInfo) {
@@ -144,7 +152,7 @@ const SettingPage = () => {
           >
             <ImgCrop rotate>
               <Upload
-                action="/utils/upload"
+                action={actionUrl}
                 listType="picture-card"
                 fileList={fileList}
                 onChange={onChange}
