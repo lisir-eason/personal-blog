@@ -32,7 +32,7 @@ const Header = ({
       message.error('博客标题不能为空！')
       return
     }
-    if (!tags) {
+    if (!tags.length) {
       message.error('博客标签不能为空！')
       return
     }

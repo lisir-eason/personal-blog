@@ -10,7 +10,7 @@ const defaultState = {
     tags: [],
     htmlContent: null,
     rawContent: null,
-    isSave: false,
+    isSave: true,
   },
   isLoginModalOpen: false,
 }

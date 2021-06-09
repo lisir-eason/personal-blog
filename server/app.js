@@ -9,7 +9,6 @@ const cors = require('koa2-cors')
 const session = require('koa-session')
 const koaBody = require('koa-body')
 
-const index = require('./routes/index')
 const users = require('./routes/users')
 const blogs = require('./routes/blog')
 const utils = require('./routes/utils')
@@ -60,7 +59,6 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(blogs.routes(), blogs.allowedMethods())
 app.use(utils.routes(), utils.allowedMethods())

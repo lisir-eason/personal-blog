@@ -14,7 +14,7 @@ async function uploadFile(ctx, file) {
   reader.pipe(upStream)
 
   if (isDev) {
-    picBaseUrl = ''
+    picBaseUrl = 'http://localhost:3001'
   } else if (isProd) {
     picBaseUrl = '/pictures'
   }
