@@ -14,9 +14,9 @@ async function uploadFile(ctx, file) {
   reader.pipe(upStream)
 
   if (isDev) {
-    picBaseUrl = 'http://localhost:3001'
+    picBaseUrl = ''
   } else if (isProd) {
-    picBaseUrl = 'http://www.lisireason.xyz:3001'
+    picBaseUrl = '/pictures'
   }
 
   return new SuccessModal({data: {url: `${picBaseUrl}/upload/${newFilename}`}})
