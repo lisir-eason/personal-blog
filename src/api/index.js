@@ -31,3 +31,11 @@ export const changePassword = (params) => {
 export const createNewBlog = (params) => {
   return api.post('/blogs/createBlog', params)
 }
+
+export const getBlogInfoById = (id) => {
+  return api.get(`/blogs/getBlog/${id}`)
+}
+
+export const getUserBlogs = (params) => {
+  return api.get('/blogs/getUserBlog', {params})
+}

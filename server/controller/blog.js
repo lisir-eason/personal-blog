@@ -1,6 +1,9 @@
-const {create} = require('../services/blog')
+const {create, getBlogInfo, getUserBlogInfo} = require('../services/blog')
+const {getUserInfo} = require('../services/user')
 const {
-  createBlogFailed
+  createBlogFailed,
+  getBlogInfoFailed,
+  getUserBlogFailed,
 } = require('../model/errNum')
 const { SuccessModal, ErrorModal } = require('../model/resModal')
 
@@ -15,6 +18,25 @@ const createBlog = async ({userId, title, tags, htmlContent, rawContent}) => {
   }
 }
 
+const getBlog = async ({id}) => {
+  const blog = await getBlogInfo({id})
+  if (blog) {
+    return new SuccessModal({data: blog})
+  }
+  return new ErrorModal(getBlogInfoFailed)
+}
+
+const getBlogByUser = async ({userName}) => {
+  const {id: userId} = await getUserInfo({userName})
+  const blogs = await getUserBlogInfo({userId})
+  if (blogs) {
+    return new SuccessModal({data: blogs})
+  }
+  return new ErrorModal(getUserBlogFailed)
+}
+
 module.exports = {
   createBlog,
+  getBlog,
+  getBlogByUser,
 }

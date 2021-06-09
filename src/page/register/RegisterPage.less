@@ -18,6 +18,19 @@
   transition: transform 1s ease;
 }
 
+.login-modal-form-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -220px;
+  width: 300px;
+  height: 300px;
+  transform: perspective(900px);
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+}
+
 .turn-form-box-left {
   transform: perspective(900px) rotateY(-90deg);
 }
@@ -30,7 +43,7 @@
   width: 300px;
   height: 300px;
   border-radius: 5px;
-  background-color: azure;
+  background-color: #fff;
   .register-btn {
     padding: 0;
   }

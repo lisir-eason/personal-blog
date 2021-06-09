@@ -1,53 +1,79 @@
-import {withRouter} from 'react-router-dom'
-import {Timeline} from 'antd'
-
+import {useEffect, useState} from 'react'
+import { useParams, useHistory} from 'react-router-dom'
+import {Timeline, Statistic, Row, Col, Divider,} from 'antd'
+import {getUserBlogs} from '../../api/index'
+import { LikeOutlined, StarOutlined, ReadOutlined, FieldNumberOutlined } from '@ant-design/icons'
+import moment from 'moment'
 import Header from '../../component/Header'
+import EmptyBox from '../../component/EmptyBox'
 import './ProfilePage.less'
 
 
-const ProfilePage = ({
-  match
-}) => {
+const ProfilePage = () => {
+  const {userName} = useParams()
+  const {push} = useHistory()
+  const [blogs, setBlogs] = useState([])
+  useEffect(() => {
+    getUserBlogs({userName}).then(res => {
+      if (res) {
+        setBlogs(res.data.data)
+      }
+    })
+  }, [userName])
+
   return (
     <div>
       <Header active="profile" />
       <div className="content-container">
-        <div className='timeline-container'>
-          <Timeline>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-            <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-            <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-            <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
-          </Timeline>
-        </div>
-
+        {
+          blogs.length ?
+            <div>
+              <Divider orientation="left">总览</Divider>
+              <div className='profile-box'>
+                <Row gutter={16}>
+                  <Col span={6}>
+                    <Statistic title="博客总数" value={blogs.length}
+                      prefix={<FieldNumberOutlined className='profile-icon'/>}/>
+                  </Col>
+                  <Col span={6}>
+                    <Statistic title="阅读" value={89}
+                      prefix={<ReadOutlined className='profile-icon'/>} />
+                  </Col>
+                  <Col span={6}>
+                    <Statistic title="点赞" value={1128}
+                      prefix={<LikeOutlined className='profile-icon'/>} />
+                  </Col>
+                  <Col span={6}>
+                    <Statistic title="收藏" value={18}
+                      prefix={<StarOutlined className='profile-icon'/>} />
+                  </Col>
+                </Row>
+              </div>
+              <Divider orientation="left">所有博客</Divider>
+              <div className='timeline-container'>
+                <Timeline>
+                  {
+                    blogs.map(blog => {
+                      return <Timeline.Item key={blog.id}>
+                        <span className="timeline-blog-title" onClick={() => {
+                          push(`/view/${blog.id}`)
+                        }}>
+                          {blog.title}
+                        </span>
+                        <span className="timeline-blog-create">
+                          {moment(blog.createdAt).format('YYYY-MM-DD')}
+                        </span>
+                      </Timeline.Item>
+                    })
+                  }
+                </Timeline>
+              </div>
+            </div> :
+            <EmptyBox />
+        }
       </div>
     </div>
   )
 }
 
-export default withRouter(ProfilePage)
+export default ProfilePage

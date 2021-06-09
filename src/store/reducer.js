@@ -11,7 +11,8 @@ const defaultState = {
     htmlContent: null,
     rawContent: null,
     isSave: false,
-  }
+  },
+  isLoginModalOpen: false,
 }
 
 export default (state = defaultState, action)=>{
@@ -24,6 +25,9 @@ export default (state = defaultState, action)=>{
     break
   case 'set_editor_info':
     state.editorInfo = {...state.editorInfo, ...action.payload}
+    break
+  case 'set_login_modal':
+    state.isLoginModalOpen = action.payload
     break
   default:
     break

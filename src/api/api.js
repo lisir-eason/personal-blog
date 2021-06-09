@@ -28,7 +28,9 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   response => {
-    if (response.status === 200) {
+    if (response.status === 500) {
+      message.error('服务器出错，请稍后重试！')
+    } else if (response.status === 200) {
       if (response.data.errno === 0 || response.data.errno === 10001) {
         return Promise.resolve(response)
       } else if ( response.data.errno === 10007) {

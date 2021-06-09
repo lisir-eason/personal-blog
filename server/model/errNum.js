@@ -42,5 +42,13 @@ module.exports = {
   createBlogFailed: {
     errno: 10010,
     message: '创建博客失败！'
-  }
+  },
+  getBlogInfoFailed: {
+    errno: 10011,
+    message: '获取的博客不存在！'
+  },
+  getUserBlogFailed: {
+    errno: 10011,
+    message: '获取用户博客失败'
+  },
 }

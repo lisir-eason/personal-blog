@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom'
 import {login} from '../../api/index'
 
 const LoginForm = ({
-  setIsLogin, history,
+  setIsLogin, history, isModal,
 }) => {
   const [remember, setRemember] = useState(true)
   const register = useSelector(state => state.register)
@@ -22,6 +22,11 @@ const LoginForm = ({
     message.error('还没有实现该功能！')
   }
 
+  const onNoLoginClick = (e) => {
+    e.preventDefault()
+    dispatch({type: 'set_login_modal', payload: false})
+  }
+
   const onFinish = (values) => {
     const {userName, password,} = values
     const params = {
@@ -31,12 +36,16 @@ const LoginForm = ({
     login(params).then(res => {
       if (res.data.errno === 0) {
         dispatch({type: 'set_user_info', payload: res.data.data})
+        if (isModal) {
+          dispatch({type: 'set_login_modal', payload: false})
+          return
+        }
         const parsed = url.parse(window.location.href, true)
         if (parsed.query.url) {
           history.push({pathname: parsed.query.url})
           return
         }
-        history.push({pathname: `/profile/${userName}`})
+        history.push({pathname: '/home'})
       } else {
         message.error(res.data.message)
       }
@@ -87,9 +96,15 @@ const LoginForm = ({
         <Form.Item noStyle>
           <Checkbox checked={remember} onChange={e => setRemember(e.target.checked)}>记住我</Checkbox>
         </Form.Item>
-        <a className="login-form-forgot" href="" onClick={onForgetPasswordClick}>
-          忘记密码
-        </a>
+        {
+          isModal?
+            <a className="login-form-forgot" href="" onClick={onNoLoginClick}>
+              暂不登录
+            </a>:
+            <a className="login-form-forgot" href="" onClick={onForgetPasswordClick}>
+              忘记密码
+            </a>
+        }
       </Form.Item>
 
       <Form.Item>
