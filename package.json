@@ -7,7 +7,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "server": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon --inspect=9229 server/bin/www",
-    "prd": "cross-env NODE_ENV=production pm2 start pm2.conf.json",
+    "prd": "cross-env NODE_ENV=production pm2 start server/bin/www",
     "lint": "eslint --ext .js ./src ./server",
     "be-test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors",
     "sync": "node ./server/db/sync.js"
