@@ -21,7 +21,7 @@ const RegisterForm = ({
       return
     }
     register(params).then(res => {
-      if (res.data.errno === 0) {
+      if (res && res.data.errno === 0) {
         message.success('注册成功！')
         setIsLogin(true)
         dispatch({
@@ -54,7 +54,7 @@ const RegisterForm = ({
                 const params = {userName: value}
                 return isUserExit(params)
                   .then(res => {
-                    if (res.data.data) {
+                    if (res && res.data.data) {
                       return Promise.reject(new Error('用户名已存在！'))
                     }
                     return Promise.resolve(null)

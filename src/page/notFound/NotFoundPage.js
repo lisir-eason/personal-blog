@@ -16,7 +16,7 @@ const NotFoundPage = ({
           subTitle="抱歉，你访问的页面不存在。"
           extra={<Button type="primary"
             onClick={() => {
-              history.push('/home')
+              history.push('/')
             }}>回到主页</Button>}
         />
       </div>

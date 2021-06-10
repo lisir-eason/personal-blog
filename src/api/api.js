@@ -35,8 +35,15 @@ api.interceptors.response.use(
       if (response.data.errno === 0 || response.data.errno === 10001) {
         return Promise.resolve(response)
       } else if ( response.data.errno === 10007) {
+        if (window.location.pathname === '/') {
+          return
+        } else if (window.location.pathname.search('profile') !== -1) {
+          return
+        } else if (window.location.pathname.search('view') !== -1) {
+          return
+        }
         const pathname = window.location.pathname
-        window.location.href= `/?url=${encodeURIComponent(pathname)}`
+        window.location.href= `/register?url=${encodeURIComponent(pathname)}`
         return
       }
       message.error(response.data.message)

@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import ImgCrop from 'antd-img-crop'
 import Header from '../../component/Header'
 import './settingPage.less'
-import {updateUserInfo, changePassword, getCurrentUser} from '../../api/index'
+import {updateUserInfo, changePassword} from '../../api/index'
 
 const SettingPage = () => {
   const layout = {labelCol: { span: 4,},wrapperCol: {span: 8},}
@@ -32,12 +32,6 @@ const SettingPage = () => {
   } else {
     actionUrl = '/apis/utils/upload'
   }
-
-  useEffect(() => {
-    getCurrentUser().then(res=> {
-      dispatch({type: 'set_user_info', payload: res.data.data})
-    })
-  }, [])
 
   useEffect(() => {
     if (userInfo) {

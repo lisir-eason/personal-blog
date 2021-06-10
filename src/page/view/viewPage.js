@@ -14,7 +14,7 @@ const viewPage = () => {
   const {push} = useHistory()
   useEffect(() => {
     getBlogInfoById(id).then(res => {
-      if (res.data) {
+      if (res && res.data) {
         setBlogInfo(res.data.data)
       }
     })

@@ -6,7 +6,6 @@ import {Modal,Form, Input,} from 'antd'
 import ReactHtmlParser from 'react-html-parser'
 import Tags from '../../component/Tags'
 import { CheckCircleTwoTone, ExclamationCircleTwoTone } from '@ant-design/icons'
-import {getCurrentUser} from '../../api/index'
 import 'braft-editor/dist/index.css'
 import 'braft-editor/dist/output.css'
 import './EditPage.less'
@@ -52,16 +51,9 @@ const EditPage = () => {
     // setEditorState(BraftEditor.createEditorState(htmlContent))
   }, [])
 
-  useEffect(() => {
-    getCurrentUser().then(res=> {
-      dispatch({type: 'set_user_info', payload: res.data.data})
-    })
-  }, [])
-
   const handleEditorChange = (state) => {
     setEditorState(state)
     const raw = state.toRAW()
-    console.log(JSON.parse(raw))
     if (raw !== rawContent) {
       setIsSave(false)
     }

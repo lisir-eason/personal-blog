@@ -34,7 +34,7 @@ const LoginForm = ({
       password
     }
     login(params).then(res => {
-      if (res.data.errno === 0) {
+      if (res && res.data.errno === 0) {
         dispatch({type: 'set_user_info', payload: res.data.data})
         if (isModal) {
           dispatch({type: 'set_login_modal', payload: false})
@@ -45,7 +45,7 @@ const LoginForm = ({
           history.push({pathname: parsed.query.url})
           return
         }
-        history.push({pathname: '/home'})
+        history.push({pathname: '/'})
       } else {
         message.error(res.data.message)
       }

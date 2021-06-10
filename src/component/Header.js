@@ -19,7 +19,7 @@ const Header = ({
   const onLogout = () => {
     logout().then(res=> {
       if (res.data.errno === 0) {
-        history.push('/')
+        history.push('/register')
       }
     })
   }
@@ -55,7 +55,7 @@ const Header = ({
           <Avatar size="large" src={userInfo ? userInfo.picture : userDefaultImg} />
           <ul className="nav-box">
             <li className="nav-item">
-              <Link to={'/home'} className={active === 'home' ? 'is-active' : ''}>首页</Link>
+              <Link to={'/'} className={active === 'home' ? 'is-active' : ''}>首页</Link>
             </li>
             <li className="nav-item">
               <span className={active === 'focus' ? 'is-active' : ''} onClick={() => {

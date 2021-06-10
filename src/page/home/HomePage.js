@@ -21,7 +21,7 @@ const HomePage = () => {
 
   useEffect(() => {
     getHomeBlogs({page: 1, perPage}).then(res => {
-      if (res.data) {
+      if (res) {
         const blogs = res.data.data.list
         const list = blogs.map(item => {
           return {
@@ -67,7 +67,7 @@ const HomePage = () => {
       return
     }
     getHomeBlogs({page: nextPage, perPage}).then(res => {
-      if (res.data) {
+      if (res) {
         const blogs = res.data.data.list
         const list = blogs.map(item => {
           return {
