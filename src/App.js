@@ -1,11 +1,12 @@
 import React, {useEffect, Suspense, lazy} from 'react'
-import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom'
+import {BrowserRouter, Route, Switch,} from 'react-router-dom'
 import {getCurrentUser} from './api/index'
 import {useDispatch} from 'react-redux'
 import {isNeedGetCurrentUserInfo} from './utils/utils'
 import {Spin} from 'antd'
 
 import LoginModal from './component/loginModal'
+import Header from './component/Header'
 
 const RegisterPage = lazy(() => import('./page/register/RegisterPage'))
 const HomePage = lazy(() => import('./page/home/HomePage'))
@@ -28,12 +29,14 @@ const App = () => {
     }
   }, [])
 
+
   return (
     <BrowserRouter>
       <LoginModal />
-      <Suspense fallback={<div className="loading-container">
-        <Spin tip='带宽只有1M,玩命加载中...'/>
-      </div>}>
+      <Header />
+      <Suspense
+        fallback={<div className="loading-container"><Spin tip='带宽只有1M,玩命加载中...'/></div>}
+      >
         <Switch>
           <Route exact path='/' component={HomePage}></Route>
           <Route exact path='/profile/:userName' component={ProfilePage}></Route>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from 'react'
-import { List, Avatar, Space, message, Spin } from 'antd'
+import { List, Avatar, Space, message, Spin, Skeleton } from 'antd'
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons'
 import Tags from '../../component/Tags'
 import {useHistory} from 'react-router-dom'
@@ -8,16 +8,32 @@ import {getHomeBlogs} from '../../api/index'
 import moment from 'moment'
 import './HomePage.less'
 
-import Header from '../../component/Header'
-
-
 const HomePage = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [firstLoading, setFirstLoading] = useState(true)
   const [hasMore, setHasMore] = useState(true)
-  const [data, setData] = useState([])
+
   const [count, setCount] = useState(0)
   const {push} = useHistory()
   const perPage = 6
+  const defaultData = []
+  for (let i = 0; i < perPage; i++) {
+    defaultData.push({
+      isFake: true,
+      href: '',
+      title: '',
+      avatar: '',
+      description: '',
+      content: '',
+      userName: '',
+      nickName: '',
+      updatedAt: '',
+      collectCount: '**',
+      likeCount: '**',
+      commentCount: '**'
+    })
+  }
+  const [data, setData] = useState(defaultData)
 
   useEffect(() => {
     getHomeBlogs({page: 1, perPage}).then(res => {
@@ -33,9 +49,14 @@ const HomePage = () => {
             userName: item.userName,
             nickName: item.nickName,
             updatedAt: item.updatedAt,
+            collectCount: parseInt(Math.random() * 100, 10),
+            likeCount: parseInt(Math.random() * 100, 10),
+            commentCount: parseInt(Math.random() * 100, 10),
           }
         })
         setData(list)
+        setLoading(false)
+        setFirstLoading(false)
         setCount(res.data.data.count)
       }
     })
@@ -58,14 +79,16 @@ const HomePage = () => {
   }
 
   const handleInfiniteOnLoad = (nextPage) => {
-    const dataCopy = data.concat([])
-    setLoading(true)
     if (data.length >= count) {
       // message.warning('没有更多数据了！')
       setLoading(false)
       setHasMore(false)
       return
     }
+    const dataCopy = data.concat([])
+    const fakeData = dataCopy.concat(defaultData)
+    setData(fakeData)
+    setLoading(true)
     getHomeBlogs({page: nextPage, perPage}).then(res => {
       if (res) {
         const blogs = res.data.data.list
@@ -79,6 +102,9 @@ const HomePage = () => {
             userName: item.userName,
             nickName: item.nickName,
             updatedAt: item.updatedAt,
+            collectCount: parseInt(Math.random() * 100, 10),
+            likeCount: parseInt(Math.random() * 100, 10),
+            commentCount: parseInt(Math.random() * 100, 10),
           }
         })
         setData(dataCopy.concat(list))
@@ -90,7 +116,6 @@ const HomePage = () => {
 
   return (
     <Fragment>
-      <Header active="home" />
       <div className='content-container'>
         <InfiniteScroll
           initialLoad={false}
@@ -107,31 +132,33 @@ const HomePage = () => {
               <List.Item
                 key={item.id}
                 actions={[
-                  <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-                  <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                  <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                  <IconText icon={StarOutlined} text={item.collectCount} key="list-vertical-star-o" />,
+                  <IconText icon={LikeOutlined} text={item.likeCount} key="list-vertical-like-o" />,
+                  <IconText icon={MessageOutlined} text={item.commentCount} key="list-vertical-message" />,
                 ]}
               >
-                <List.Item.Meta
-                  avatar={<Avatar src={item.avatar} size={40} onClick={() => {
-                    push(`/profile/${item.userName}`)
-                  }}/>}
-                  title={<a href={item.href}>{item.title}</a>}
-                  description={ <DescriptionBox tags={item.description} userName={item.userName}
-                    nickName={item.nickName} updatedAt={item.updatedAt}/>}
-                />
-                <p className='blog-description' onClick={() => {
-                  push(item.href)
-                }}>
-                  {item.content}
-                </p>
+                <Skeleton loading={loading && item.isFake} active avatar>
+                  <List.Item.Meta
+                    avatar={<Avatar src={item.avatar} size={40} onClick={() => {
+                      push(`/profile/${item.userName}`)
+                    }}/>}
+                    title={<a href={item.href}>{item.title}</a>}
+                    description={ <DescriptionBox tags={item.description} userName={item.userName}
+                      nickName={item.nickName} updatedAt={item.updatedAt}/>}
+                  />
+                  <p className='blog-description' onClick={() => {
+                    push(item.href)
+                  }}>
+                    {item.content}
+                  </p>
+                </Skeleton>
               </List.Item>
             }
           />
           {
-            loading && hasMore &&
-              <div className="loading-container">
-                <Spin tip='数据加载中...'/>
+            loading && hasMore && !firstLoading &&
+              <div className="loading-container1">
+                <Spin/>
               </div>
           }
         </InfiniteScroll>

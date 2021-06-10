@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import Header from '../../component/Header'
 import {getBlogInfoById} from '../../api/index'
 import { Avatar, Image } from 'antd'
 import ReactHtmlParser from 'react-html-parser'
@@ -21,7 +20,6 @@ const viewPage = () => {
   }, [id])
   return (
     <div>
-      <Header />
       {
         blogInfo && <div className='content-container'>
           <div className='article-title'>

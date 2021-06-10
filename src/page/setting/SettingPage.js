@@ -3,7 +3,6 @@ import { Form, Input, Button, Checkbox, Radio, Upload, Modal, Space, notificatio
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
 import ImgCrop from 'antd-img-crop'
-import Header from '../../component/Header'
 import './settingPage.less'
 import {updateUserInfo, changePassword} from '../../api/index'
 
@@ -103,7 +102,6 @@ const SettingPage = () => {
 
   return (
     <div>
-      <Header active='setting' />
       <div className='content-container'>
         <Form {...layout} form={form} onFinish={onFinish}>
           <Form.Item

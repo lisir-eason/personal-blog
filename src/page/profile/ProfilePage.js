@@ -4,7 +4,6 @@ import {Timeline, Statistic, Row, Col, Divider,} from 'antd'
 import {getUserBlogs} from '../../api/index'
 import { LikeOutlined, StarOutlined, ReadOutlined, FieldNumberOutlined } from '@ant-design/icons'
 import moment from 'moment'
-import Header from '../../component/Header'
 import EmptyBox from '../../component/EmptyBox'
 import './ProfilePage.less'
 
@@ -23,7 +22,6 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <Header active="profile" />
       <div className="content-container">
         {
           blogs.length ?

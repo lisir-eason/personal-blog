@@ -1,5 +1,4 @@
 import {useState, useEffect,} from 'react'
-import Header from '../../component/Header'
 import BraftEditor from 'braft-editor'
 import {useDispatch, useSelector} from 'react-redux'
 import {Modal,Form, Input,} from 'antd'
@@ -73,7 +72,6 @@ const EditPage = () => {
 
   return (
     <div>
-      <Header active='edit' />
       <div className='content-container'>
         <div className="my-component">
           <Form layout='inline'>

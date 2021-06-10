@@ -1,14 +1,12 @@
 import { Result, Button } from 'antd'
 import {withRouter} from 'react-router-dom'
 
-import Header from '../../component/Header'
 
 const NotFoundPage = ({
   history
 }) => {
   return (
     <div>
-      <Header />
       <div className='content-container'>
         <Result
           status="404"
