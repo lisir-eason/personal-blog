@@ -26,6 +26,10 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin')
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+// gzip插件
+const CompressionPlugin = require('compression-webpack-plugin')
+//打包分析插件
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -589,6 +593,14 @@ module.exports = function (webpackEnv) {
       ]
     },
     'plugins': [
+      // compression-webpack-plugin 因为版本问题，2.x将 asset 改为了 filename
+      new CompressionPlugin({
+        filename: '[path].gz[query]', // 目标资源名称。[file] 会被替换成原资源。[path] 会被替换成原资源路径，[query] 替换成原查询字符串
+        algorithm: 'gzip', // 算法
+        test: new RegExp('\\.(js|css)$'), // 压缩 js 与 css
+        threshold: 10240, // 只处理比这个值大的资源。按字节计算
+        minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
+      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -615,6 +627,7 @@ module.exports = function (webpackEnv) {
             undefined
         )
       ),
+      // new BundleAnalyzerPlugin(),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358

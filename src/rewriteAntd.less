@@ -42,4 +42,85 @@ body {
   .ant-list-item-meta {
     margin-bottom: 10px;
   }
-} 
+}
+
+.login-form-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+  width: 300px;
+  height: 300px;
+  transform: perspective(900px);
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+}
+
+.login-modal-form-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -220px;
+  width: 300px;
+  height: 300px;
+  transform: perspective(900px);
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+}
+
+.turn-form-box-left {
+  transform: perspective(900px) rotateY(-90deg);
+}
+
+.login-form {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 30px 24px;
+  width: 300px;
+  height: 300px;
+  border-radius: 5px;
+  background-color: #fff;
+  .register-btn {
+    padding: 0;
+  }
+  .login-form-forgot {
+    float: right;
+  }
+  .ant-col-rtl {
+    .login-form-forgot {
+      float: left;
+    }
+  }
+  .login-form-button {
+    width: 100%;
+    margin-bottom: 15px;
+  }  
+}
+
+.login-form-before {
+  transform: translateZ(150px)
+}
+
+.login-form-right {
+  transform: rotateY(90deg) translateZ(150px);
+}
+
+.loading-container {
+  position: fixed;
+    top: 52px;
+    left: 50%;
+    margin-left: -500px;
+    width: 1000px;
+    height: calc(100vh - 52px);
+    text-align: center;
+    opacity: 0.6;
+    background-color: #fff;
+    .ant-spin {
+      position: absolute;
+      top: 50%;
+      margin-top: -110px;
+    }
+}

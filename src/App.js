@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom'
 import {getCurrentUser} from './api/index'
 import {useDispatch} from 'react-redux'
 import {isNeedGetCurrentUserInfo} from './utils/utils'
+import {Spin} from 'antd'
 
 import LoginModal from './component/loginModal'
 
@@ -30,7 +31,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <LoginModal />
-      <Suspense fallback={<div>loading</div>}>
+      <Suspense fallback={<div className="loading-container">
+        <Spin tip='带宽只有1M,玩命加载中...'/>
+      </div>}>
         <Switch>
           <Route exact path='/' component={HomePage}></Route>
           <Route exact path='/profile/:userName' component={ProfilePage}></Route>

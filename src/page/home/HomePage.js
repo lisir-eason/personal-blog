@@ -131,7 +131,7 @@ const HomePage = () => {
           {
             loading && hasMore &&
               <div className="loading-container">
-                <Spin tip='数据加载中...' wrapperClassName='home-page-spin'/>
+                <Spin tip='数据加载中...'/>
               </div>
           }
         </InfiniteScroll>
