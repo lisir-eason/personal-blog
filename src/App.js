@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, Suspense, lazy} from 'react'
 import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom'
 import {getCurrentUser} from './api/index'
 import {useDispatch} from 'react-redux'
@@ -6,14 +6,14 @@ import {isNeedGetCurrentUserInfo} from './utils/utils'
 
 import LoginModal from './component/loginModal'
 
-import RegisterPage from './page/register/RegisterPage'
-import HomePage from './page/home/HomePage'
-import ProfilePage from './page/profile/ProfilePage'
-import focusPage from './page/focus/focusPage'
-import NotFoundPage from './page/notFound/NotFoundPage'
-import SettingPage from './page/setting/SettingPage'
-import EditPage from './page/edit/EditPage'
-import viewPage from './page/view/viewPage'
+const RegisterPage = lazy(() => import('./page/register/RegisterPage'))
+const HomePage = lazy(() => import('./page/home/HomePage'))
+const ProfilePage = lazy(() => import('./page/profile/ProfilePage'))
+const focusPage = lazy(() => import('./page/focus/focusPage'))
+const NotFoundPage = lazy(() => import('./page/notFound/NotFoundPage'))
+const SettingPage = lazy(() => import('./page/setting/SettingPage'))
+const EditPage = lazy(() => import('./page/edit/EditPage'))
+const viewPage = lazy(() => import('./page/view/viewPage'))
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,18 +30,21 @@ const App = () => {
   return (
     <BrowserRouter>
       <LoginModal />
-      <Switch>
-        <Route exact path='/' component={HomePage}></Route>
-        <Route exact path='/profile/:userName' component={ProfilePage}></Route>
-        <Route exact path='/focus' component={focusPage}></Route>
-        <Route exact path='/setting' component={SettingPage}></Route>
-        <Route exact path='/edit' component={EditPage}></Route>
-        <Route exact path='/view/:id' component={viewPage}></Route>
-        <Route exact path='/register' component={RegisterPage}></Route>
-        <Route exact path='*' component={NotFoundPage}></Route>
-      </Switch>
+      <Suspense fallback={<div>loading</div>}>
+        <Switch>
+          <Route exact path='/' component={HomePage}></Route>
+          <Route exact path='/profile/:userName' component={ProfilePage}></Route>
+          <Route exact path='/focus' component={focusPage}></Route>
+          <Route exact path='/setting' component={SettingPage}></Route>
+          <Route exact path='/edit' component={EditPage}></Route>
+          <Route exact path='/view/:id' component={viewPage}></Route>
+          <Route exact path='/register' component={RegisterPage}></Route>
+          <Route exact path='*' component={NotFoundPage}></Route>
+        </Switch>
+      </Suspense>
     </BrowserRouter>
   )
 }
+
 
 export default App
