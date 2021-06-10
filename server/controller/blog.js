@@ -1,4 +1,5 @@
 const {create, getBlogInfo, getUserBlogInfo} = require('../services/blog')
+const {getHomePageBlogs} = require('../cache/blog')
 const {getUserInfo} = require('../services/user')
 const {
   createBlogFailed,
@@ -35,8 +36,17 @@ const getBlogByUser = async ({userName}) => {
   return new ErrorModal(getUserBlogFailed)
 }
 
+const getHomePageBlogList = async ({page, perPage}) => {
+  const blogs = await getHomePageBlogs({page, perPage})
+  if (blogs) {
+    return new SuccessModal({data: blogs})
+  }
+  return new ErrorModal(getHomeBlogFailed)
+}
+
 module.exports = {
   createBlog,
   getBlog,
   getBlogByUser,
+  getHomePageBlogList,
 }

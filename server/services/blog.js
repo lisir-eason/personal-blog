@@ -68,8 +68,57 @@ const getUserBlogInfo = async ({userId}) => {
   return blogs
 }
 
+const getHomeBlog = async ({page, perPage}) => {
+  const result = await Blog.findAndCountAll({
+    attributes: ['id', 'rawContent', 'tags', 'title', 'updatedAt'],
+    order: [['updatedAt']],
+    offset: (page - 1) * perPage,
+    limit: perPage,
+    include: [
+      {
+        model: User,
+        attributes: ['userName', 'nickName', 'picture']
+      }
+    ],
+  })
+
+  if (!result) {
+    return result
+  }
+
+  const blogs = result.rows.map(item => {
+    const { id: blogId, rawContent, tags, title, updatedAt} = item.dataValues
+    const {nickName, picture, userName} = item.dataValues.User.dataValues
+    const {blocks} = JSON.parse(rawContent)
+    const length = blocks.length
+    const description = blocks.reduce((pre, cur, index) => {
+      if (index === length - 1) {
+        return pre + cur.text + '。'
+      }
+      return pre + cur.text + ','
+    }, '')
+    return {
+      updatedAt,
+      id: blogId,
+      title,
+      tags: tags.split(','),
+      description,
+      userName,
+      nickName,
+      picture: picture ? picture : defaultUserImg
+    }
+  })
+
+  return {
+    count: result.count,
+    list: blogs
+  }
+
+}
+
 module.exports = {
   create,
   getBlogInfo,
   getUserBlogInfo,
+  getHomeBlog,
 }

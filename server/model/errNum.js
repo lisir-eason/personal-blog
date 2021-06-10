@@ -51,4 +51,8 @@ module.exports = {
     errno: 10011,
     message: '获取用户博客失败'
   },
+  getHomeBlogFailed: {
+    errno: 10012,
+    message: '获取首页博客失败'
+  },
 }

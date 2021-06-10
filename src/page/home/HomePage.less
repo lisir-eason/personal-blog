@@ -1,5 +1,29 @@
-@font-size:20px;
+.loading-container {
+  position: fixed;
+    top: 52px;
+    left: 50%;
+    margin-left: -500px;
+    width: 1000px;
+    height: calc(100vh - 52px);
+    text-align: center;
+    opacity: 0.6;
+    background-color: #fff;
+    .ant-spin {
+      position: absolute;
+      top: 50%;
+      margin-top: -110px;
+    }
+}
 
-.test{
-  font-size: @font-size;
+.blog-description {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.middle-text {
+  margin: 0 10px;
 }

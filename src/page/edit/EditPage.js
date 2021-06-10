@@ -61,6 +61,7 @@ const EditPage = () => {
   const handleEditorChange = (state) => {
     setEditorState(state)
     const raw = state.toRAW()
+    console.log(JSON.parse(raw))
     if (raw !== rawContent) {
       setIsSave(false)
     }

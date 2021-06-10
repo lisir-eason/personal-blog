@@ -30,16 +30,17 @@ api.interceptors.response.use(
   response => {
     if (response.status === 500) {
       message.error('服务器出错，请稍后重试！')
+      return
     } else if (response.status === 200) {
       if (response.data.errno === 0 || response.data.errno === 10001) {
         return Promise.resolve(response)
       } else if ( response.data.errno === 10007) {
         const pathname = window.location.pathname
         window.location.href= `/?url=${encodeURIComponent(pathname)}`
-      } else {
-        message.error(response.data.message)
-        return Promise.reject(response)
+        return
       }
+      message.error(response.data.message)
+      return Promise.reject(response)
     }
     return Promise.reject(response)
   },

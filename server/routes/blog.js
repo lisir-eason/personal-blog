@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const loginCheck = require('../middlewares/loginCheck')
-const {createBlog, getBlog, getBlogByUser} = require('../controller/blog')
+const {createBlog, getBlog, getBlogByUser, getHomePageBlogList} = require('../controller/blog')
 
 
 router.prefix('/blogs')
@@ -19,6 +19,13 @@ router.get('/getBlog/:id', async (ctx, next) => {
 router.get('/getUserBlog', async (ctx, nex) => {
   const userName = ctx.query.userName
   ctx.body = await getBlogByUser({userName})
+})
+
+router.get('/getHomePageBlog', async (ctx, nex) => {
+  let {page, perPage} = ctx.query
+  page = parseInt(page, 10)
+  perPage = parseInt(perPage, 10)
+  ctx.body = await getHomePageBlogList({page, perPage})
 })
 
 module.exports = router

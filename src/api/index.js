@@ -39,3 +39,7 @@ export const getBlogInfoById = (id) => {
 export const getUserBlogs = (params) => {
   return api.get('/blogs/getUserBlog', {params})
 }
+
+export const getHomeBlogs = (params) => {
+  return api.get('/blogs/getHomePageBlog', {params})
+}
