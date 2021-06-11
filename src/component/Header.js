@@ -66,7 +66,9 @@ const Header = ({
     <div className='header-container'>
       <header className="header-box">
         <div className="header-inner">
-          <Avatar size="large" src={userInfo ? userInfo.picture : userDefaultImg} />
+          <Tooltip title={userInfo ? userInfo.nickName : '游客'}>
+            <Avatar size="large" src={userInfo ? userInfo.picture : userDefaultImg} />
+          </Tooltip>
           <ul className="nav-box">
             <li className="nav-item">
               <Link to={'/'} className={pathname === '/' ? 'is-active' : ''}>首页</Link>

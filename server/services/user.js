@@ -3,7 +3,7 @@
  */
 
 const { User } = require('../db/model/index')
-const {defaultUserImg} = require('../conf/proConf')
+const {defaultUserImg, genRandomPic} = require('../conf/proConf')
 
 async function getUserInfo({userName, password}) {
   let where = { userName }
@@ -28,7 +28,7 @@ async function getUserInfo({userName, password}) {
 }
 
 async function createUser({userName, password}) {
-  const user = await User.create({ userName, password, nickName:userName})
+  const user = await User.create({ userName, password, nickName: userName, picture: genRandomPic()})
   return user.dataValues
 }
 

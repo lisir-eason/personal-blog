@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from 'react'
-import { List, Avatar, Space, message, Spin, Skeleton, } from 'antd'
+import { List, Avatar, Space, Tooltip, Spin, Skeleton, } from 'antd'
 import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined } from '@ant-design/icons'
 import Tags from '../../component/Tags'
 import {useHistory} from 'react-router-dom'
@@ -140,9 +140,12 @@ const HomePage = () => {
               >
                 <Skeleton loading={loading && item.isFake} active avatar>
                   <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} size={40} onClick={() => {
-                      push(`/profile/${item.userName}`)
-                    }}/>}
+                    avatar={
+                      <Tooltip title={item.nickName} placement="bottom">
+                        <Avatar src={item.avatar} size={40} onClick={() => {
+                          push(`/profile/${item.userName}`)
+                        }}/>
+                      </Tooltip>}
                     title={<a href={item.href}>{item.title}</a>}
                     description={ <DescriptionBox tags={item.description} userName={item.userName}
                       nickName={item.nickName} updatedAt={item.updatedAt}/>}

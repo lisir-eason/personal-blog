@@ -1,7 +1,7 @@
 import {useEffect, useState, Fragment} from 'react'
 import { useParams, useHistory} from 'react-router-dom'
 import {Timeline, Statistic, Row, Col, Divider, Skeleton,
-  Descriptions, Image, Space, Tooltip, message} from 'antd'
+  Descriptions, Image, Space, Tooltip, message, Avatar} from 'antd'
 import {useSelector, useDispatch} from 'react-redux'
 import {getUserBlogs} from '../../api/index'
 import { LikeOutlined, StarOutlined, ReadOutlined, EyeOutlined,
@@ -117,12 +117,33 @@ const ProfilePage = () => {
                     <Descriptions.Item label="昵称">{visitUserInfo.nickName}</Descriptions.Item>
                     <Descriptions.Item label="城市">{visitUserInfo.city}</Descriptions.Item>
                     <Descriptions.Item label="性别">{genders[visitUserInfo.gender]}</Descriptions.Item>
-                  </Descriptions>
-                  <Descriptions layout="vertical">
                     <Descriptions.Item label="个性签名">
                       {
                         visitUserInfo.signature ? visitUserInfo.signature : '这个人很懒，什么也没有留下'
                       }
+                    </Descriptions.Item>
+                  </Descriptions>
+                  {/* <Descriptions layout="vertical">
+                    <Descriptions.Item label="个性签名">
+                      {
+                        visitUserInfo.signature ? visitUserInfo.signature : '这个人很懒，什么也没有留下'
+                      }
+                    </Descriptions.Item>
+                  </Descriptions> */}
+                  <Descriptions>
+                    <Descriptions.Item label="谁关注了他" labelStyle={{lineHeight: '32px'}}>
+                      <Avatar.Group
+                        maxCount={20}>
+                        {
+                          visitUserFollower.map(item => {
+                            return <Tooltip title={item.nickName} placement="top">
+                              <Avatar src={item.picture} onClick={() => {
+                                push(`/profile/${item.userName}`)
+                              }}/>
+                            </Tooltip>
+                          })
+                        }
+                      </Avatar.Group>
                     </Descriptions.Item>
                   </Descriptions>
                   <Space split={<Divider type="vertical" />} className='user-link-box'>
