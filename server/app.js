@@ -12,6 +12,7 @@ const koaBody = require('koa-body')
 const users = require('./routes/users')
 const blogs = require('./routes/blog')
 const utils = require('./routes/utils')
+const userRelation = require('./routes/user-relation')
 // error handler
 onerror(app)
 
@@ -62,6 +63,7 @@ app.use(async (ctx, next) => {
 app.use(users.routes(), users.allowedMethods())
 app.use(blogs.routes(), blogs.allowedMethods())
 app.use(utils.routes(), utils.allowedMethods())
+app.use(userRelation.routes(), userRelation.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

@@ -62,5 +62,21 @@ module.exports = {
   updateBlogFailed: {
     errno: 10015,
     message: '更新博客失败！'
-  }
+  },
+  followFailed: {
+    errno: 10016,
+    message: '关注失败！'
+  },
+  noFollowRelation: {
+    errno: 10017,
+    message: '没有关注此用户！'
+  },
+  getFollowerFailed: {
+    errno: 10018,
+    message: '获取粉丝失败'
+  },
+  unFollowFailed: {
+    errno: 10019,
+    message: '取消关注失败！'
+  },
 }

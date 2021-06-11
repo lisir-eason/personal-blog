@@ -47,3 +47,19 @@ export const getHomeBlogs = (params) => {
 export const updateBlogById = (params) => {
   return api.post('/blogs/updateBlog', params)
 }
+
+export const followUser = (params) => {
+  return api.post(`/userRelation/follow?userId=${params.userId}`)
+}
+
+export const unFollowUser = (params) => {
+  return api.post(`/userRelation/unFollow?userId=${params.userId}`)
+}
+
+export const isFollowUser = (params) => {
+  return api.get('/userRelation/isFollow', {params})
+}
+
+export const getUserFollower = (params) => {
+  return api.get('/userRelation/getFollower', {params})
+}

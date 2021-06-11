@@ -2,32 +2,49 @@ import {useEffect, useState, Fragment} from 'react'
 import { useParams, useHistory} from 'react-router-dom'
 import {Timeline, Statistic, Row, Col, Divider, Skeleton,
   Descriptions, Image, Space, Tooltip, message} from 'antd'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {getUserBlogs} from '../../api/index'
 import { LikeOutlined, StarOutlined, ReadOutlined, EyeOutlined,
   GithubOutlined, QqOutlined, WechatOutlined, HeartTwoTone, SettingFilled} from '@ant-design/icons'
 import moment from 'moment'
 import EmptyBox from '../../component/EmptyBox'
+import {followUser, getUserFollower, unFollowUser,} from '../../api/index'
 import './ProfilePage.less'
-
 
 const ProfilePage = () => {
   const {userName} = useParams()
   const {push} = useHistory()
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [visitUserInfo, setVisitUserInfo] = useState()
+  const [visitUserFollower, setVisitUserFollower] = useState([])
   const userInfo = useSelector(state => state.userInfo)
   const genders = ['', '男', '女', '保密']
+
+
+  const getVisitUserFollower = (params) => {
+    getUserFollower(params).then(result => {
+      if (result && result.data) {
+        setVisitUserFollower(result.data.data)
+      }
+    })
+  }
+
   useEffect(() => {
     getUserBlogs({userName}).then(res => {
       if (res) {
         setBlogs(res.data.data.blogs)
         setVisitUserInfo(res.data.data.user)
+        const params = {
+          userName: res.data.data.user.userName
+        }
+        getVisitUserFollower(params)
       }
       setLoading(false)
     })
   }, [userName])
+
 
   const copyText = (text) => {
     const input = document.createElement('input')
@@ -39,6 +56,45 @@ const ProfilePage = () => {
       message.success(`号码：${text}复制成功！`)
     }
     document.body.removeChild(input)
+  }
+
+  const isCurrentUserFollow = (currentUserName) => {
+    let flag = false
+    visitUserFollower.map(item => {
+      if (item.userName === currentUserName) {
+        flag = true
+      }
+    })
+    return flag
+  }
+
+  const followHe = (userId) => {
+    if (!userInfo) {
+      dispatch({type: 'set_login_modal', payload: true})
+      return
+    }
+
+    const params = {
+      userId
+    }
+    followUser(params).then(res=> {
+      if (res && res.data) {
+        message.success('关注成功！')
+        getVisitUserFollower({userName: visitUserInfo.userName})
+      }
+    })
+  }
+
+  const unFollowHe = (userId) => {
+    const params = {
+      userId
+    }
+    unFollowUser(params).then(res=> {
+      if (res && res.data) {
+        message.success('取消关注成功！')
+        getVisitUserFollower({userName: visitUserInfo.userName})
+      }
+    })
   }
 
   return (
@@ -104,13 +160,23 @@ const ProfilePage = () => {
                             push('/setting')
                           }} />
                         </Tooltip> :
-                        <Tooltip title="关注他！">
-                          <HeartTwoTone twoToneColor='#ff4d4f' />
-                        </Tooltip>
+                        <Fragment>
+                          {
+                            userInfo && isCurrentUserFollow(userInfo.userName) ?
+                              <Tooltip title="取消关注">
+                                <HeartTwoTone twoToneColor='#8590a6' onClick={() => {
+                                  unFollowHe(visitUserInfo.id)
+                                }}/>
+                              </Tooltip>:
+                              <Tooltip title="关注他！">
+                                <HeartTwoTone twoToneColor='#ff4d4f' onClick={() => {
+                                  followHe(visitUserInfo.id)
+                                }}/>
+                              </Tooltip>
+                          }
+                        </Fragment>
                     }
-                    {/* <Tooltip title="取消关注">
-                      <HeartTwoTone twoToneColor='#8590a6' />
-                    </Tooltip> */}
+
                   </Space>
 
                 </Col>
