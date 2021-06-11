@@ -17,10 +17,6 @@ const LoginForm = ({
   useEffect(() => {
     form.setFieldsValue(register)
   }, [register])
-  const onForgetPasswordClick = (e) => {
-    e.preventDefault()
-    message.error('还没有实现该功能！')
-  }
 
   const onNoLoginClick = (e) => {
     e.preventDefault()
@@ -101,8 +97,10 @@ const LoginForm = ({
             <a className="login-form-forgot" href="" onClick={onNoLoginClick}>
               暂不登录
             </a>:
-            <a className="login-form-forgot" href="" onClick={onForgetPasswordClick}>
-              忘记密码
+            <a className="login-form-forgot" href="" onClick={() => {
+              history.push({pathname: '/'})
+            }}>
+              随便看看
             </a>
         }
       </Form.Item>

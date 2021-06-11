@@ -1,15 +1,18 @@
 import {useState, useEffect,} from 'react'
 import BraftEditor from 'braft-editor'
 import {useDispatch, useSelector} from 'react-redux'
+import {useParams} from 'react-router-dom'
 import {Modal,Form, Input,} from 'antd'
 import ReactHtmlParser from 'react-html-parser'
 import Tags from '../../component/Tags'
+import {getBlogInfoById} from '../../api/index'
 import { CheckCircleTwoTone, ExclamationCircleTwoTone } from '@ant-design/icons'
 import 'braft-editor/dist/index.css'
 import 'braft-editor/dist/output.css'
 import './EditPage.less'
 
 const EditPage = () => {
+  const {id} = useParams()
   const [isModalVisible, setIsModalVisible] = useState(false)
   const editorInfo = useSelector(state => state.editorInfo)
   const {title, tags, rawContent, isSave} = editorInfo
@@ -31,6 +34,12 @@ const EditPage = () => {
   const setIsSave = (flag) => {
     dispatch({type: 'set_editor_info', payload: {isSave: flag}})
   }
+  const setTitle = (blogTitle) => {
+    dispatch({type: 'set_editor_info', payload: {title: blogTitle}})
+  }
+  const setBlogId = (blogId) => {
+    dispatch({type: 'set_editor_info', payload: {id: blogId}})
+  }
   const extendControls = [
     {
       key: 'custom-button',
@@ -46,8 +55,17 @@ const EditPage = () => {
     </div>
 
   useEffect(() => {
-    // const htmlContent = await fetchEditorContent()
-    // setEditorState(BraftEditor.createEditorState(htmlContent))
+    if (id !== 'new') {
+      getBlogInfoById(id).then(res => {
+        if (res && res.data) {
+          const {blog, user} = res.data.data
+          setEditorState(BraftEditor.createEditorState(blog.rawContent))
+          setTags(blog.tags)
+          setTitle(blog.title)
+          setBlogId(id)
+        }
+      })
+    }
   }, [])
 
   const handleEditorChange = (state) => {
@@ -79,7 +97,7 @@ const EditPage = () => {
               <Input placeholder="请输入标题" style={{width: '200px'}}
                 value={editorInfo.title}
                 onChange={e => {
-                  dispatch({type: 'set_editor_info', payload: {title: e.target.value}})
+                  setTitle(e.target.value)
                 }}/>
             </Form.Item>
             <Form.Item label="文章标签" >

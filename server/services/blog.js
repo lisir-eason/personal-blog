@@ -7,6 +7,13 @@ const create = async ({userId, title, tags, htmlContent, rawContent}) => {
   return result.dataValues
 }
 
+const update = async ({id, title, tags, htmlContent, rawContent}) => {
+  const result = await Blog.update({ title, tags, htmlContent, rawContent}, {
+    where: {id}
+  })
+  return result[0] > 0
+}
+
 const getBlogInfo = async ({id}) => {
   const where = {
     id
@@ -16,7 +23,7 @@ const getBlogInfo = async ({id}) => {
     include: [
       {
         model: User,
-        attributes: ['userName', 'nickName', 'picture']
+        attributes: ['id', 'userName', 'nickName', 'picture']
       }
     ]
   })
@@ -26,7 +33,7 @@ const getBlogInfo = async ({id}) => {
   }
 
   const {createdAt, htmlContent, id: blogId, rawContent, tags, title, updatedAt} = result.dataValues
-  const {nickName, picture, userName} = result.dataValues.User.dataValues
+  const {id: userId, nickName, picture, userName} = result.dataValues.User.dataValues
 
   const res = {
     blog: {
@@ -39,6 +46,7 @@ const getBlogInfo = async ({id}) => {
       htmlContent
     },
     user: {
+      id: userId,
       userName,
       nickName,
       picture: picture ? picture : defaultUserImg
@@ -118,6 +126,7 @@ const getHomeBlog = async ({page, perPage}) => {
 
 module.exports = {
   create,
+  update,
   getBlogInfo,
   getUserBlogInfo,
   getHomeBlog,

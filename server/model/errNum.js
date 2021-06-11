@@ -48,11 +48,19 @@ module.exports = {
     message: '获取的博客不存在！'
   },
   getUserBlogFailed: {
-    errno: 10011,
-    message: '获取用户博客失败'
+    errno: 10012,
+    message: '获取用户博客失败！'
   },
   getHomeBlogFailed: {
-    errno: 10012,
-    message: '获取首页博客失败'
+    errno: 10013,
+    message: '获取首页博客失败！'
   },
+  noAccessToUpdateBlog: {
+    errno: 10014,
+    message: '您不是作者，无法编辑此文章！'
+  },
+  updateBlogFailed: {
+    errno: 10015,
+    message: '更新博客失败！'
+  }
 }

@@ -6,6 +6,7 @@ const defaultState = {
   },
   userInfo: null,
   editorInfo: {
+    id: 'new',
     title: '',
     tags: [],
     htmlContent: null,

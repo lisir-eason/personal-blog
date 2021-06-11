@@ -2,19 +2,19 @@ import {useState, useEffect} from 'react'
 import {Avatar, Button, Tooltip, Space, Typography, Divider, message} from 'antd'
 import { EditFilled, LogoutOutlined} from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
-import {Link, withRouter, useLocation} from 'react-router-dom'
-import {logout, createNewBlog} from '../api/index'
+import {Link, withRouter, useLocation,} from 'react-router-dom'
+import {logout, createNewBlog, updateBlogById} from '../api/index'
 import './Header.less'
 import userDefaultImg from '../static/user.png'
 
 
 const Header = ({
-  active, history
+  history,
 }) => {
   const userInfo = useSelector(state => state.userInfo)
   const editorInfo = useSelector(state => state.editorInfo)
   const dispatch = useDispatch()
-  const {title, tags, rawContent, htmlContent, isSave} = editorInfo
+  const {id, title, tags, rawContent, htmlContent, isSave} = editorInfo
   const {pathname} = useLocation()
 
   const onLogout = () => {
@@ -44,9 +44,22 @@ const Header = ({
     const params = {
       title, tags, rawContent, htmlContent,
     }
-    createNewBlog(params).then(res => {
-      message.success('发布成功！')
-    })
+    if (id === 'new') {
+      createNewBlog(params).then(res => {
+        message.success('发布成功！')
+        if (res && res.data) {
+          history.push(`/view/${res.data.data.id}`)
+        }
+      })
+    } else {
+      params.id = parseInt(id, 10)
+      updateBlogById(params).then(res => {
+        if (res && res.data) {
+          message.success('更新成功！')
+          history.push(`/view/${id}`)
+        }
+      })
+    }
   }
 
   return (
@@ -88,14 +101,14 @@ const Header = ({
           </ul>
           <Space split={<Divider type="vertical" />} className='menu-box'>
             <span className='welcome-span'>欢迎您！{userInfo ? userInfo.nickName : '游客'}</span>
-            {active === 'edit' ? <Button type="primary" onClick={postBlog}>发布</Button>: null}
+            {pathname.search('edit') !== -1 ? <Button type="primary" onClick={postBlog}>发布</Button>: null}
             <Tooltip title="去创作！">
-              <EditFilled className={pathname === '/edit' ? 'active-icon' : ''} onClick={() => {
+              <EditFilled className={pathname.search('edit') !== -1 ? 'active-icon' : ''} onClick={() => {
                 if (!userInfo) {
                   dispatch({type: 'set_login_modal', payload: true})
                   return
                 }
-                history.push('/edit')
+                history.push('/edit/new')
               }}/>
             </Tooltip>
             <Tooltip title="登出">

@@ -35,14 +35,14 @@ const App = () => {
       <LoginModal />
       <Header />
       <Suspense
-        fallback={<div className="loading-container"><Spin tip='带宽只有1M,玩命加载中...'/></div>}
+        fallback={<div className="loading-container"><Spin tip='玩命加载中...'/></div>}
       >
         <Switch>
           <Route exact path='/' component={HomePage}></Route>
           <Route exact path='/profile/:userName' component={ProfilePage}></Route>
           <Route exact path='/focus' component={focusPage}></Route>
           <Route exact path='/setting' component={SettingPage}></Route>
-          <Route exact path='/edit' component={EditPage}></Route>
+          <Route exact path='/edit/:id' component={EditPage}></Route>
           <Route exact path='/view/:id' component={viewPage}></Route>
           <Route exact path='/register' component={RegisterPage}></Route>
           <Route exact path='*' component={NotFoundPage}></Route>

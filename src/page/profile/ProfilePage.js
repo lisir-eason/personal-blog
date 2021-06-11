@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import { useParams, useHistory} from 'react-router-dom'
 import {Timeline, Statistic, Row, Col, Divider,} from 'antd'
 import {getUserBlogs} from '../../api/index'
-import { LikeOutlined, StarOutlined, ReadOutlined, FieldNumberOutlined } from '@ant-design/icons'
+import { LikeOutlined, StarOutlined, ReadOutlined, EyeOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import EmptyBox from '../../component/EmptyBox'
 import './ProfilePage.less'
@@ -31,11 +31,11 @@ const ProfilePage = () => {
                 <Row gutter={16}>
                   <Col span={6}>
                     <Statistic title="博客总数" value={blogs.length}
-                      prefix={<FieldNumberOutlined className='profile-icon'/>}/>
+                      prefix={<ReadOutlined className='profile-icon'/>}/>
                   </Col>
                   <Col span={6}>
                     <Statistic title="阅读" value={89}
-                      prefix={<ReadOutlined className='profile-icon'/>} />
+                      prefix={<EyeOutlined className='profile-icon'/>} />
                   </Col>
                   <Col span={6}>
                     <Statistic title="点赞" value={1128}

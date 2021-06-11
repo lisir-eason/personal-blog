@@ -1,6 +1,6 @@
 import React, {useEffect, useState, Fragment} from 'react'
-import { List, Avatar, Space, message, Spin, Skeleton } from 'antd'
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons'
+import { List, Avatar, Space, message, Spin, Skeleton, } from 'antd'
+import { MessageOutlined, LikeOutlined, StarOutlined, EyeOutlined } from '@ant-design/icons'
 import Tags from '../../component/Tags'
 import {useHistory} from 'react-router-dom'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -132,6 +132,7 @@ const HomePage = () => {
               <List.Item
                 key={item.id}
                 actions={[
+                  <IconText icon={EyeOutlined} text={item.collectCount} key="list-vertical-eye-o" />,
                   <IconText icon={StarOutlined} text={item.collectCount} key="list-vertical-star-o" />,
                   <IconText icon={LikeOutlined} text={item.likeCount} key="list-vertical-like-o" />,
                   <IconText icon={MessageOutlined} text={item.commentCount} key="list-vertical-message" />,

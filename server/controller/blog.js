@@ -1,10 +1,12 @@
-const {create, getBlogInfo, getUserBlogInfo} = require('../services/blog')
+const {create, update, getBlogInfo, getUserBlogInfo} = require('../services/blog')
 const {getHomePageBlogs} = require('../cache/blog')
 const {getUserInfo} = require('../services/user')
 const {
   createBlogFailed,
   getBlogInfoFailed,
   getUserBlogFailed,
+  noAccessToUpdateBlog,
+  updateBlogFailed,
 } = require('../model/errNum')
 const { SuccessModal, ErrorModal } = require('../model/resModal')
 
@@ -17,6 +19,19 @@ const createBlog = async ({userId, title, tags, htmlContent, rawContent}) => {
     console.error(error.message, error.stack)
     return new ErrorModal(createBlogFailed)
   }
+}
+
+const updateBlog = async ({id, userId, title, tags, htmlContent, rawContent}) => {
+  const blog = await getBlogInfo({id})
+  if (blog.user.id !== userId) {
+    return new ErrorModal(noAccessToUpdateBlog)
+  }
+
+  const result = await update({id, title, tags, htmlContent, rawContent})
+  if (result) {
+    return new SuccessModal({data: '修改成功'})
+  }
+  return new ErrorModal(updateBlogFailed)
 }
 
 const getBlog = async ({id}) => {
@@ -49,4 +64,5 @@ module.exports = {
   getBlog,
   getBlogByUser,
   getHomePageBlogList,
+  updateBlog,
 }
