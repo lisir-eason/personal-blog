@@ -1,7 +1,7 @@
-import {useEffect, useState,} from 'react'
+import {useEffect, useState, Fragment} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
 import {getBlogInfoById} from '../../api/index'
-import { Avatar, Image, Button } from 'antd'
+import { Avatar, Image, Button, Skeleton } from 'antd'
 import {useSelector} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
 import moment from 'moment'
@@ -22,29 +22,35 @@ const viewPage = () => {
   }, [id])
   return (
     <div>
-      {
-        blogInfo && <div className='content-container'>
-          <div className='article-title'>
-            <span className='title-span'>{blogInfo.blog.title}</span>
-            <Tags tags={blogInfo.blog.tags} readonly/>
-            {
-              userInfo && userInfo.userName === blogInfo.user.userName &&
-              <Button type="primary" onClick={() => {
-                push(`/edit/${blogInfo.blog.id}`)
-              }}>编辑</Button>
-            }
-          </div>
-          <div className='author-info'>
-            <Avatar size={28} src={blogInfo.user.picture} />
-            <span className='author-user' onClick={() => {
-              push(`/profile/${blogInfo.user.userName}`)
-            }}>{blogInfo.user.nickName}</span>
-            <span className="article-date">{moment(blogInfo.blog.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
-          </div>
-          <div className="braft-output-content">{ReactHtmlParser(blogInfo.blog.htmlContent)}</div>
-        </div>
-      }
-
+      <div className='content-container'>
+        {
+          blogInfo ?
+            <Fragment>
+              <div className='article-title'>
+                <span className='title-span'>{blogInfo.blog.title}</span>
+                <Tags tags={blogInfo.blog.tags} readonly/>
+                {
+                  userInfo && userInfo.userName === blogInfo.user.userName &&
+            <Button type="primary" onClick={() => {
+              push(`/edit/${blogInfo.blog.id}`)
+            }}>编辑</Button>
+                }
+              </div>
+              <div className='author-info'>
+                <Avatar size={28} src={blogInfo.user.picture} />
+                <span className='author-user' onClick={() => {
+                  push(`/profile/${blogInfo.user.userName}`)
+                }}>{blogInfo.user.nickName}</span>
+                <span className="article-date">{moment(blogInfo.blog.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+              </div>
+              <div className="braft-output-content">{ReactHtmlParser(blogInfo.blog.htmlContent)}</div>
+            </Fragment> :
+            <Fragment>
+              <Skeleton active paragraph={{rows:0}}/>
+              <Skeleton active avatar paragraph={{rows:8}}/>
+            </Fragment>
+        }
+      </div>
     </div>
   )
 }

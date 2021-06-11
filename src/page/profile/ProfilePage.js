@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, Fragment} from 'react'
 import { useParams, useHistory} from 'react-router-dom'
-import {Timeline, Statistic, Row, Col, Divider,} from 'antd'
+import {Timeline, Statistic, Row, Col, Divider, Skeleton,} from 'antd'
 import {getUserBlogs} from '../../api/index'
 import { LikeOutlined, StarOutlined, ReadOutlined, EyeOutlined } from '@ant-design/icons'
 import moment from 'moment'
@@ -12,11 +12,13 @@ const ProfilePage = () => {
   const {userName} = useParams()
   const {push} = useHistory()
   const [blogs, setBlogs] = useState([])
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     getUserBlogs({userName}).then(res => {
       if (res) {
         setBlogs(res.data.data)
       }
+      setLoading(false)
     })
   }, [userName])
 
@@ -24,7 +26,7 @@ const ProfilePage = () => {
     <div>
       <div className="content-container">
         {
-          blogs.length ?
+          !loading && blogs.length &&
             <div>
               <Divider orientation="left">总览</Divider>
               <div className='profile-box'>
@@ -66,8 +68,15 @@ const ProfilePage = () => {
                   }
                 </Timeline>
               </div>
-            </div> :
-            <EmptyBox />
+            </div>
+        }
+        {
+          !loading && blogs.length === 0 && <EmptyBox />
+        }
+        {
+          loading && <Fragment>
+            <Skeleton active paragraph={{rows:8}}/>
+          </Fragment>
         }
       </div>
     </div>
