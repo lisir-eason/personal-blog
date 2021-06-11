@@ -28,3 +28,21 @@
     margin-bottom: 10px;
   }
 }
+
+.follow-list {
+  .ant-avatar {
+    cursor: pointer;
+    transition: all .2s linear;
+  }
+  .ant-avatar:first-child{
+    &:hover {
+      margin-right: 6px;
+    } 
+  }
+  .ant-avatar:not(:first-child){
+    &:hover {
+      margin-left: -2px;
+      margin-right: 6px;
+    } 
+  }
+}

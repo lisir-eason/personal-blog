@@ -123,15 +123,8 @@ const ProfilePage = () => {
                       }
                     </Descriptions.Item>
                   </Descriptions>
-                  {/* <Descriptions layout="vertical">
-                    <Descriptions.Item label="个性签名">
-                      {
-                        visitUserInfo.signature ? visitUserInfo.signature : '这个人很懒，什么也没有留下'
-                      }
-                    </Descriptions.Item>
-                  </Descriptions> */}
                   <Descriptions>
-                    <Descriptions.Item label="谁关注了他" labelStyle={{lineHeight: '32px'}}>
+                    <Descriptions.Item className="follow-list" label="谁关注了他" labelStyle={{lineHeight: '32px'}}>
                       <Avatar.Group
                         maxCount={20}>
                         {
