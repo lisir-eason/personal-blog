@@ -145,6 +145,30 @@ const SettingPage = () => {
             <Input placeholder='请输入城市!' />
           </Form.Item>
           <Form.Item
+            label="个性签名"
+            name="signature"
+          >
+            <Input placeholder='请输入个性签名!' />
+          </Form.Item>
+          <Form.Item
+            label="QQ"
+            name="qq"
+          >
+            <Input placeholder='请输入qq号码!' />
+          </Form.Item>
+          <Form.Item
+            label="微信"
+            name="weChat"
+          >
+            <Input placeholder='请输入微信!' />
+          </Form.Item>
+          <Form.Item
+            label="GitHub"
+            name="github"
+          >
+            <Input placeholder='请输入github地址!' />
+          </Form.Item>
+          <Form.Item
             label="头像"
             name="picture"
           >

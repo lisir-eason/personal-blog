@@ -60,16 +60,16 @@ async function getCurrentUserInfo(ctx) {
   }
 }
 
-async function changeUserInfo(ctx, {nickName, gender, city, picture}) {
+async function changeUserInfo(ctx, body) {
   const {userName} = ctx.session.userInfo
-  const newData = {nickName, gender, city, picture}
+  const newData = body
   const where = {
     userName
   }
   const result = await updateUser(newData, where)
 
   if (result) {
-    const newUserInfo = {...ctx.session.userInfo, nickName, gender, city, picture}
+    const newUserInfo = {...ctx.session.userInfo, ...body}
     ctx.session.userInfo = newUserInfo
     return new SuccessModal({data: newUserInfo})
   }

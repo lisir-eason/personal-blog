@@ -31,9 +31,9 @@ const viewPage = () => {
                 <Tags tags={blogInfo.blog.tags} readonly/>
                 {
                   userInfo && userInfo.userName === blogInfo.user.userName &&
-            <Button type="primary" onClick={() => {
-              push(`/edit/${blogInfo.blog.id}`)
-            }}>编辑</Button>
+                    <Button type="primary" onClick={() => {
+                      push(`/edit/${blogInfo.blog.id}`)
+                    }}>编辑</Button>
                 }
               </div>
               <div className='author-info'>

@@ -103,7 +103,7 @@ const getHomeBlog = async ({page, perPage}) => {
       if (index === length - 1) {
         return pre + cur.text + '。'
       }
-      return pre + cur.text + ','
+      return pre + cur.text + '，'
     }, '')
     return {
       updatedAt,

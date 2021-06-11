@@ -35,7 +35,23 @@ const User = seq.define('User', {
   city: {
     type: String,
     comment: '城市'
-  }
+  },
+  signature: {
+    type: String,
+    comment: '签名'
+  },
+  qq: {
+    type: String,
+    comment: 'QQ'
+  },
+  weChat: {
+    type: String,
+    comment: '微信'
+  },
+  github: {
+    type: String,
+    comment: 'github'
+  },
 })
 
 module.exports = User

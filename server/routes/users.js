@@ -36,8 +36,7 @@ router.post('/currentUser', loginCheck, async function (ctx, next) {
 })
 
 router.post('/updateUserInfo', loginCheck, async (ctx, next) => {
-  const {nickName, gender, city, picture} = ctx.request.body
-  ctx.body = await changeUserInfo(ctx, {nickName, gender, city, picture})
+  ctx.body = await changeUserInfo(ctx, ctx.request.body)
 })
 
 router.post('/changePassword', loginCheck, async (ctx, next) => {

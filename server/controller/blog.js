@@ -43,10 +43,10 @@ const getBlog = async ({id}) => {
 }
 
 const getBlogByUser = async ({userName}) => {
-  const {id: userId} = await getUserInfo({userName})
-  const blogs = await getUserBlogInfo({userId})
+  const userInfo = await getUserInfo({userName})
+  const blogs = await getUserBlogInfo({userId: userInfo.id})
   if (blogs) {
-    return new SuccessModal({data: blogs})
+    return new SuccessModal({data: {blogs, user: userInfo}})
   }
   return new ErrorModal(getUserBlogFailed)
 }
