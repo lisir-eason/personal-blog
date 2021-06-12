@@ -103,6 +103,12 @@ const ProfilePage = () => {
     }, 0)
   }
 
+  const calculateLikeCount = (blogList) =>{
+    return blogList.reduce((pre, cur) => {
+      return pre + cur.likeCount
+    }, 0)
+  }
+
   return (
     <div>
       <div className="content-container">
@@ -222,7 +228,7 @@ const ProfilePage = () => {
                       prefix={<EyeOutlined className='profile-icon'/>} />
                   </Col>
                   <Col span={6}>
-                    <Statistic title="点赞" value={1128}
+                    <Statistic title="点赞" value={calculateLikeCount(blogs)}
                       prefix={<LikeOutlined className='profile-icon'/>} />
                   </Col>
                   <Col span={6}>

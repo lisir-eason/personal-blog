@@ -1,4 +1,5 @@
 const {create, update, getBlogInfo, getUserBlogInfo} = require('../services/blog')
+const {getLiker} = require('../services/like-relation')
 const {getHomePageBlogs} = require('../cache/blog')
 const {getUserInfo} = require('../services/user')
 const {
@@ -7,6 +8,8 @@ const {
   getUserBlogFailed,
   noAccessToUpdateBlog,
   updateBlogFailed,
+  getHomeBlogFailed,
+  getLikerFailed,
 } = require('../model/errNum')
 const { SuccessModal, ErrorModal } = require('../model/resModal')
 
@@ -69,6 +72,14 @@ const getHomePageBlogList = async ({page, perPage}) => {
   return new ErrorModal(getHomeBlogFailed)
 }
 
+const getBlogLiker = async ({blogId}) => {
+  const blogs = await getLiker({blogId})
+  if (blogs) {
+    return new SuccessModal({data: blogs})
+  }
+  return new ErrorModal(getLikerFailed)
+}
+
 module.exports = {
   createBlog,
   getBlog,
@@ -76,4 +87,5 @@ module.exports = {
   getHomePageBlogList,
   updateBlog,
   increaseViewCount,
+  getBlogLiker,
 }

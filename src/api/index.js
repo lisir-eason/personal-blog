@@ -52,6 +52,10 @@ export const followUser = (params) => {
   return api.post(`/userRelation/follow?userId=${params.userId}`)
 }
 
+export const getBlogLikers = (params) => {
+  return api.get('/blogs/getLiker', {params})
+}
+
 export const unFollowUser = (params) => {
   return api.post(`/userRelation/unFollow?userId=${params.userId}`)
 }
@@ -66,4 +70,12 @@ export const getUserFollower = (params) => {
 
 export const increaseViewCount = (params) => {
   return api.post('/blogs/increaseViewCount', params)
+}
+
+export const userLikeBlog = (params) => {
+  return api.post('/blogs/userLikeBlog', params)
+}
+
+export const unLikeBlog = (params) => {
+  return api.post('/blogs/unLikeBlog', params)
 }

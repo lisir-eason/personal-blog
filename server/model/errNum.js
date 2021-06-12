@@ -79,4 +79,16 @@ module.exports = {
     errno: 10019,
     message: '取消关注失败！'
   },
+  getLikerFailed: {
+    errno: 10020,
+    message: '获取喜欢博客的人失败！'
+  },
+  likeBlogFailed: {
+    errno: 10021,
+    message: '喜欢博客失败！'
+  },
+  unlikeBlogFailed: {
+    errno: 10022,
+    message: '取消喜欢博客失败！'
+  },
 }

@@ -52,6 +52,18 @@ const SettingPage = () => {
     setFileList(newFileList)
   }
 
+  const beforeUpload = (file) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('只能上传JPG或者PNG文件!')
+    }
+    const isLt2M = file.size / 1024 < 200
+    if (!isLt2M) {
+      message.error('上传的图片不能大于200KB!')
+    }
+    return isJpgOrPng && isLt2M
+  }
+
   const onFinish = (values) => {
     confirm({
       title: '警告',
@@ -178,6 +190,7 @@ const SettingPage = () => {
                 listType="picture-card"
                 fileList={fileList}
                 onChange={onChange}
+                beforeUpload={beforeUpload}
                 maxCount={1}
               >
                 {fileList.length < 5 && '+ Upload'}

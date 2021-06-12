@@ -1,9 +1,10 @@
 import {useEffect, useState, Fragment} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import {getBlogInfoById, increaseViewCount,} from '../../api/index'
+import {getBlogInfoById, increaseViewCount, getBlogLikers,
+  userLikeBlog, unLikeBlog,} from '../../api/index'
 import { Avatar, Image, Button, Skeleton, Space, Tooltip,} from 'antd'
 import { LikeTwoTone, StarTwoTone, EyeOutlined } from '@ant-design/icons'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
 import moment from 'moment'
 import Tags from '../../component/Tags'
@@ -12,8 +13,13 @@ import './viewPage.less'
 const viewPage = () => {
   const {id} = useParams()
   const [blogInfo, setBlogInfo] = useState()
+  const [likerCount, setLikerCount] = useState('**')
+  const [likerList, setLikerList] = useState([])
   const userInfo = useSelector(state => state.userInfo)
+  const [currentUserIsLike, setCurrentUserIsLike] = useState(false)
+  const dispatch = useDispatch()
   const {push} = useHistory()
+
   useEffect(() => {
     getBlogInfoById(id).then(res => {
       if (res && res.data) {
@@ -21,7 +27,45 @@ const viewPage = () => {
         increaseViewCount({id: res.data.data.blog.id})
       }
     })
+    getBlogLikers({blogId: id}).then(res => {
+      setLikerCount(res.data.data.count)
+      setLikerList(res.data.data.users)
+    })
   }, [id])
+
+  useEffect(() => {
+    if (userInfo) {
+      likerList.map(item => {
+        if (item.userName === userInfo.userName) {
+          setCurrentUserIsLike(true)
+        }
+      })
+    }
+  }, [likerList])
+
+  const likeBlog = () => {
+    if (!userInfo) {
+      dispatch({type: 'set_login_modal', payload: true})
+      return
+    }
+    userLikeBlog({id: blogInfo.blog.id}).then(res => {
+      if (res && res.data) {
+        setCurrentUserIsLike(true)
+        setLikerCount(likerCount + 1)
+      }
+    })
+  }
+
+  const userUnLikeBlog = () => {
+    unLikeBlog({id: blogInfo.blog.id}).then(res => {
+      if (res && res.data) {
+        setCurrentUserIsLike(false)
+        setLikerCount(likerCount - 1)
+      }
+    })
+  }
+
+
   return (
     <div>
       <div className='content-container'>
@@ -50,14 +94,28 @@ const viewPage = () => {
                     }} />
                     <span className="article-count">{blogInfo.blog.viewCount}</span>
                   </Tooltip>
-                  <Tooltip title="点赞">
-                    <LikeTwoTone className='article-count-curser-point' />
+                  {
+                    userInfo && currentUserIsLike ?
+                      <div className='article-count-label' onClick={userUnLikeBlog}>
+                        <Tooltip title="取消喜欢">
+                          <LikeTwoTone />
+                        </Tooltip>
+                        <span className="article-count check-color">{likerCount}</span>
+                      </div> :
+                      <div className='article-count-label' onClick={likeBlog}>
+                        <Tooltip title="喜欢">
+                          <LikeTwoTone twoToneColor='#555666'/>
+                        </Tooltip>
+
+                        <span className="article-count">{likerCount}</span>
+                      </div>
+                  }
+                  <div className='article-count-label'>
+                    <Tooltip title="收藏">
+                      <StarTwoTone twoToneColor='#555666'/>
+                    </Tooltip>
                     <span className="article-count">{20}</span>
-                  </Tooltip>
-                  <Tooltip title="收藏">
-                    <StarTwoTone className='article-count-curser-point' />
-                    <span className="article-count">{20}</span>
-                  </Tooltip>
+                  </div>
                 </div>
               </div>
               <div className="braft-output-content">{ReactHtmlParser(blogInfo.blog.htmlContent)}</div>

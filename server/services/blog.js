@@ -1,5 +1,4 @@
-const { Blog, User } = require('../db/model/index')
-const {defaultUserImg} = require('../conf/proConf')
+const { Blog, User, LikeRelation } = require('../db/model/index')
 
 
 const create = async ({userId, title, tags, htmlContent, rawContent}) => {
@@ -50,7 +49,7 @@ const getBlogInfo = async ({id}) => {
       id: userId,
       userName,
       nickName,
-      picture: picture ? picture : defaultUserImg
+      picture,
     }
   }
 
@@ -63,7 +62,13 @@ const getUserBlogInfo = async ({userId}) => {
       userId
     },
     attributes: ['id', 'tags', 'title', 'createdAt', 'updatedAt', 'viewCount'],
-    order: [['createdAt']]
+    order: [['createdAt']],
+    include: [
+      {
+        model: LikeRelation,
+        attributes: ['userId'],
+      }
+    ]
   })
 
   if (!result) {
@@ -71,7 +76,8 @@ const getUserBlogInfo = async ({userId}) => {
   }
 
   const blogs = result.map(item => {
-    return item.dataValues
+    const likeCount = item.dataValues.LikeRelations.length
+    return {...item.dataValues, likeCount}
   })
 
   return blogs
@@ -87,6 +93,10 @@ const getHomeBlog = async ({page, perPage}) => {
       {
         model: User,
         attributes: ['userName', 'nickName', 'picture']
+      },
+      {
+        model: LikeRelation,
+        attributes: ['userId'],
       }
     ],
   })
@@ -98,6 +108,7 @@ const getHomeBlog = async ({page, perPage}) => {
   const blogs = result.rows.map(item => {
     const { id: blogId, rawContent, tags, title, updatedAt, viewCount} = item.dataValues
     const {nickName, picture, userName} = item.dataValues.User.dataValues
+    const likeCount = item.dataValues.LikeRelations.length
     const {blocks} = JSON.parse(rawContent)
     const length = blocks.length
     const description = blocks.reduce((pre, cur, index) => {
@@ -114,10 +125,15 @@ const getHomeBlog = async ({page, perPage}) => {
       description,
       userName,
       nickName,
-      picture: picture ? picture : defaultUserImg,
+      picture,
       viewCount,
+      likeCount,
     }
   })
+
+  // async blogs.map(item => {
+  //   await getLiker({blogId: item.id})
+  // })
 
   return {
     count: result.count,
