@@ -15,7 +15,7 @@ const ProfilePage = () => {
   const {userName} = useParams()
   const {push} = useHistory()
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState()
   const [loading, setLoading] = useState(true)
   const [visitUserInfo, setVisitUserInfo] = useState()
   const [visitUserFollower, setVisitUserFollower] = useState([])
@@ -100,19 +100,24 @@ const ProfilePage = () => {
   return (
     <div>
       <div className="content-container">
-        {
-          !loading && blogs.length !== 0 &&
-            <div>
-              <Divider orientation="left">基本信息</Divider>
-              <Row gutter={16} style={{padding: '15px 50px'}}>
-                <Col span={6}>
-                  <Image
-                    width={150}
-                    height={150}
-                    src={visitUserInfo.picture}
-                  />
-                </Col>
-                <Col span={18}>
+        <Divider orientation="left">基本信息</Divider>
+        <Row gutter={16} style={{padding: '15px 50px'}}>
+          <Col span={6}>
+            {
+              visitUserInfo ?
+                <Image
+                  width={150}
+                  height={150}
+                  src={visitUserInfo.picture}
+                /> :
+                <Skeleton.Avatar active size={150} shape='square' />
+            }
+
+          </Col>
+          <Col span={18}>
+            {
+              visitUserInfo ?
+                <Fragment>
                   <Descriptions>
                     <Descriptions.Item label="昵称">{visitUserInfo.nickName}</Descriptions.Item>
                     <Descriptions.Item label="城市">{visitUserInfo.city}</Descriptions.Item>
@@ -129,7 +134,7 @@ const ProfilePage = () => {
                         maxCount={20}>
                         {
                           visitUserFollower.map(item => {
-                            return <Tooltip title={item.nickName} placement="top">
+                            return <Tooltip title={item.nickName} placement="top" key={item.userName}>
                               <Avatar src={item.picture} onClick={() => {
                                 push(`/profile/${item.userName}`)
                               }}/>
@@ -190,15 +195,18 @@ const ProfilePage = () => {
                           }
                         </Fragment>
                     }
-
                   </Space>
-
-                </Col>
-              </Row>
-
-              <Divider orientation="left">总览</Divider>
-              <div className='profile-box'>
-                <Row gutter={16}>
+                </Fragment> :
+                <Skeleton active />
+            }
+          </Col>
+        </Row>
+        <Divider orientation="left">总览</Divider>
+        <div className='profile-box'>
+          <Row gutter={16}>
+            {
+              blogs ?
+                <Fragment>
                   <Col span={6}>
                     <Statistic title="博客总数" value={blogs.length}
                       prefix={<ReadOutlined className='profile-icon'/>}/>
@@ -215,37 +223,41 @@ const ProfilePage = () => {
                     <Statistic title="收藏" value={18}
                       prefix={<StarOutlined className='profile-icon'/>} />
                   </Col>
-                </Row>
-              </div>
-              <Divider orientation="left">所有博客</Divider>
-              <div className='timeline-container'>
-                <Timeline>
-                  {
-                    blogs.map(blog => {
-                      return <Timeline.Item key={blog.id}>
-                        <span className="timeline-blog-title" onClick={() => {
-                          push(`/view/${blog.id}`)
-                        }}>
-                          {blog.title}
-                        </span>
-                        <span className="timeline-blog-create">
-                          {moment(blog.createdAt).format('YYYY-MM-DD')}
-                        </span>
-                      </Timeline.Item>
-                    })
-                  }
-                </Timeline>
-              </div>
-            </div>
-        }
-        {
-          !loading && blogs.length === 0 && <EmptyBox />
-        }
-        {
-          loading && <Fragment>
-            <Skeleton active paragraph={{rows:8}}/>
-          </Fragment>
-        }
+                </Fragment> :
+                <Skeleton active paragraph={{rows:1}} />
+            }
+          </Row>
+        </div>
+        <Divider orientation="left">所有博客</Divider>
+        <div className='timeline-container'>
+          {
+            !loading && blogs.length !== 0 &&
+                 <Timeline>
+                   {
+                     blogs.map(blog => {
+                       return <Timeline.Item key={blog.id}>
+                         <span className="timeline-blog-title" onClick={() => {
+                           push(`/view/${blog.id}`)
+                         }}>
+                           {blog.title}
+                         </span>
+                         <span className="timeline-blog-create">
+                           {moment(blog.createdAt).format('YYYY-MM-DD')}
+                         </span>
+                       </Timeline.Item>
+                     })
+                   }
+                 </Timeline>
+          }
+          {
+            !loading && blogs.length === 0 && <EmptyBox />
+          }
+          {
+            loading && <Fragment>
+              <Skeleton active paragraph={{rows:8}}/>
+            </Fragment>
+          }
+        </div>
       </div>
     </div>
   )
