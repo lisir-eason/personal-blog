@@ -65,8 +65,11 @@ const EditPage = () => {
           setBlogId(id)
         }
       })
+    } else {
+      dispatch({type: 'reset_editor_info'})
+      setEditorState(BraftEditor.createEditorState())
     }
-  }, [])
+  }, [id])
 
   const handleEditorChange = (state) => {
     setEditorState(state)

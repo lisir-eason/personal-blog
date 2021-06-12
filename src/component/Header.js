@@ -46,16 +46,19 @@ const Header = ({
     }
     if (id === 'new') {
       createNewBlog(params).then(res => {
-        message.success('发布成功！')
         if (res && res.data) {
+          message.success('发布成功！')
+          dispatch({type: 'reset_editor_info'})
           history.push(`/view/${res.data.data.id}`)
         }
+
       })
     } else {
       params.id = parseInt(id, 10)
       updateBlogById(params).then(res => {
         if (res && res.data) {
           message.success('更新成功！')
+          dispatch({type: 'reset_editor_info'})
           history.push(`/view/${id}`)
         }
       })

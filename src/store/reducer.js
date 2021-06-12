@@ -27,6 +27,16 @@ export default (state = defaultState, action)=>{
   case 'set_editor_info':
     state.editorInfo = {...state.editorInfo, ...action.payload}
     break
+  case 'reset_editor_info':
+    state.editorInfo = {
+      id: 'new',
+      title: '',
+      tags: [],
+      htmlContent: null,
+      rawContent: null,
+      isSave: true,
+    }
+    break
   case 'set_login_modal':
     state.isLoginModalOpen = action.payload
     break
