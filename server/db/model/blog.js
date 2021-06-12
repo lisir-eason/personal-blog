@@ -27,6 +27,12 @@ const Blog = seq.define('Blog', {
     allowNull: false,
     comment: 'html内容'
   },
+  viewCount: {
+    type: Integer,
+    allowNull: false,
+    defaultValue: 0,
+    comment: '博客浏览次数'
+  },
 })
 
 module.exports = Blog

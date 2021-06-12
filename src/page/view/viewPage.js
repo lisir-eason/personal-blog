@@ -1,7 +1,8 @@
 import {useEffect, useState, Fragment} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import {getBlogInfoById} from '../../api/index'
-import { Avatar, Image, Button, Skeleton } from 'antd'
+import {getBlogInfoById, increaseViewCount,} from '../../api/index'
+import { Avatar, Image, Button, Skeleton, Space, Tooltip,} from 'antd'
+import { LikeTwoTone, StarTwoTone, EyeOutlined } from '@ant-design/icons'
 import {useSelector} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
 import moment from 'moment'
@@ -17,6 +18,7 @@ const viewPage = () => {
     getBlogInfoById(id).then(res => {
       if (res && res.data) {
         setBlogInfo(res.data.data)
+        increaseViewCount({id: res.data.data.blog.id})
       }
     })
   }, [id])
@@ -42,6 +44,21 @@ const viewPage = () => {
                   push(`/profile/${blogInfo.user.userName}`)
                 }}>{blogInfo.user.nickName}</span>
                 <span className="article-date">{moment(blogInfo.blog.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+                <div className='article-count-box'>
+                  <Tooltip title="">
+                    <EyeOutlined className="article-count-curser-default" onClick={() => {
+                    }} />
+                    <span className="article-count">{blogInfo.blog.viewCount}</span>
+                  </Tooltip>
+                  <Tooltip title="点赞">
+                    <LikeTwoTone className='article-count-curser-point' />
+                    <span className="article-count">{20}</span>
+                  </Tooltip>
+                  <Tooltip title="收藏">
+                    <StarTwoTone className='article-count-curser-point' />
+                    <span className="article-count">{20}</span>
+                  </Tooltip>
+                </div>
               </div>
               <div className="braft-output-content">{ReactHtmlParser(blogInfo.blog.htmlContent)}</div>
             </Fragment> :

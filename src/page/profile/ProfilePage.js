@@ -97,6 +97,12 @@ const ProfilePage = () => {
     })
   }
 
+  const calculateViewCount = (blogList) =>{
+    return blogList.reduce((pre, cur) => {
+      return pre + cur.viewCount
+    }, 0)
+  }
+
   return (
     <div>
       <div className="content-container">
@@ -212,7 +218,7 @@ const ProfilePage = () => {
                       prefix={<ReadOutlined className='profile-icon'/>}/>
                   </Col>
                   <Col span={6}>
-                    <Statistic title="阅读" value={89}
+                    <Statistic title="阅读" value={calculateViewCount(blogs)}
                       prefix={<EyeOutlined className='profile-icon'/>} />
                   </Col>
                   <Col span={6}>

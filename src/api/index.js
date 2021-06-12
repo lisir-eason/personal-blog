@@ -63,3 +63,7 @@ export const isFollowUser = (params) => {
 export const getUserFollower = (params) => {
   return api.get('/userRelation/getFollower', {params})
 }
+
+export const increaseViewCount = (params) => {
+  return api.post('/blogs/increaseViewCount', params)
+}

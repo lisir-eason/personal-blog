@@ -8,8 +8,8 @@ client.on('error', function(error) {
   console.error(error)
 })
 
-//redis失效时间，设置为15秒
-const set = (key, value, timeout = 15) => {
+//redis失效时间，设置为60秒
+const set = (key, value, timeout = 60) => {
   if (typeof value === 'object') {
     value = JSON.stringify(value)
   }

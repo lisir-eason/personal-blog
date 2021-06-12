@@ -34,6 +34,16 @@ const updateBlog = async ({id, userId, title, tags, htmlContent, rawContent}) =>
   return new ErrorModal(updateBlogFailed)
 }
 
+const increaseViewCount = async ({id}) => {
+  const blog = await getBlogInfo({id})
+  const viewCount = blog.blog.viewCount + 1
+  const result = await update({id, viewCount})
+  if (result) {
+    return new SuccessModal({data: '增加浏览量成功'})
+  }
+  return new ErrorModal(updateBlogFailed)
+}
+
 const getBlog = async ({id}) => {
   const blog = await getBlogInfo({id})
   if (blog) {
@@ -65,4 +75,5 @@ module.exports = {
   getBlogByUser,
   getHomePageBlogList,
   updateBlog,
+  increaseViewCount,
 }

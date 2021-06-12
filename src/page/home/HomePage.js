@@ -49,6 +49,7 @@ const HomePage = () => {
             userName: item.userName,
             nickName: item.nickName,
             updatedAt: item.updatedAt,
+            viewCount: item.viewCount,
             collectCount: parseInt(Math.random() * 100, 10),
             likeCount: parseInt(Math.random() * 100, 10),
             commentCount: parseInt(Math.random() * 100, 10),
@@ -102,6 +103,7 @@ const HomePage = () => {
             userName: item.userName,
             nickName: item.nickName,
             updatedAt: item.updatedAt,
+            viewCount: item.viewCount,
             collectCount: parseInt(Math.random() * 100, 10),
             likeCount: parseInt(Math.random() * 100, 10),
             commentCount: parseInt(Math.random() * 100, 10),
@@ -132,7 +134,7 @@ const HomePage = () => {
               <List.Item
                 key={item.id}
                 actions={[
-                  <IconText icon={EyeOutlined} text={item.collectCount} key="list-vertical-eye-o" />,
+                  <IconText icon={EyeOutlined} text={item.viewCount} key="list-vertical-eye-o" />,
                   <IconText icon={StarOutlined} text={item.collectCount} key="list-vertical-star-o" />,
                   <IconText icon={LikeOutlined} text={item.likeCount} key="list-vertical-like-o" />,
                   <IconText icon={MessageOutlined} text={item.commentCount} key="list-vertical-message" />,

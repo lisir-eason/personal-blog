@@ -7,8 +7,8 @@ const create = async ({userId, title, tags, htmlContent, rawContent}) => {
   return result.dataValues
 }
 
-const update = async ({id, title, tags, htmlContent, rawContent}) => {
-  const result = await Blog.update({ title, tags, htmlContent, rawContent}, {
+const update = async ({id, ...others}) => {
+  const result = await Blog.update(others, {
     where: {id}
   })
   return result[0] > 0
@@ -32,7 +32,7 @@ const getBlogInfo = async ({id}) => {
     return result
   }
 
-  const {createdAt, htmlContent, id: blogId, rawContent, tags, title, updatedAt} = result.dataValues
+  const {createdAt, htmlContent, id: blogId, rawContent, tags, title, viewCount, updatedAt, } = result.dataValues
   const {id: userId, nickName, picture, userName} = result.dataValues.User.dataValues
 
   const res = {
@@ -43,7 +43,8 @@ const getBlogInfo = async ({id}) => {
       title,
       tags: tags.split(','),
       rawContent,
-      htmlContent
+      htmlContent,
+      viewCount,
     },
     user: {
       id: userId,
@@ -61,7 +62,7 @@ const getUserBlogInfo = async ({userId}) => {
     where: {
       userId
     },
-    attributes: ['id', 'tags', 'title', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'tags', 'title', 'createdAt', 'updatedAt', 'viewCount'],
     order: [['createdAt']]
   })
 
@@ -78,7 +79,7 @@ const getUserBlogInfo = async ({userId}) => {
 
 const getHomeBlog = async ({page, perPage}) => {
   const result = await Blog.findAndCountAll({
-    attributes: ['id', 'rawContent', 'tags', 'title', 'updatedAt'],
+    attributes: ['id', 'rawContent', 'tags', 'title', 'updatedAt', 'viewCount'],
     order: [['updatedAt', 'DESC']],
     offset: (page - 1) * perPage,
     limit: perPage,
@@ -95,7 +96,7 @@ const getHomeBlog = async ({page, perPage}) => {
   }
 
   const blogs = result.rows.map(item => {
-    const { id: blogId, rawContent, tags, title, updatedAt} = item.dataValues
+    const { id: blogId, rawContent, tags, title, updatedAt, viewCount} = item.dataValues
     const {nickName, picture, userName} = item.dataValues.User.dataValues
     const {blocks} = JSON.parse(rawContent)
     const length = blocks.length
@@ -113,7 +114,8 @@ const getHomeBlog = async ({page, perPage}) => {
       description,
       userName,
       nickName,
-      picture: picture ? picture : defaultUserImg
+      picture: picture ? picture : defaultUserImg,
+      viewCount,
     }
   })
 
