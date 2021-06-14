@@ -95,6 +95,15 @@ const Header = ({
               }}>个人主页</span>
             </li>
             <li className="nav-item">
+              <span className={pathname === '/my' ? 'is-active' : ''} onClick={() => {
+                if (!userInfo) {
+                  dispatch({type: 'set_login_modal', payload: true})
+                  return
+                }
+                history.push('/my')
+              }}>我的</span>
+            </li>
+            <li className="nav-item">
               <span className={pathname === '/setting' ? 'is-active' : ''} onClick={() => {
                 if (!userInfo) {
                   dispatch({type: 'set_login_modal', payload: true})

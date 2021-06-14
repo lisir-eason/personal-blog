@@ -91,4 +91,24 @@ module.exports = {
     errno: 10022,
     message: '取消喜欢博客失败！'
   },
+  createCollectionFailed: {
+    errno: 10022,
+    message: '创建收藏夹失败！'
+  },
+  createCollectBlogFailed: {
+    errno: 10022,
+    message: '收藏微博失败！'
+  },
+  updateCollectionFailed: {
+    errno: 10023,
+    message: '更新文件夹名失败！'
+  },
+  deleteCollectionFailed: {
+    errno: 10024,
+    message: '删除文件夹失败！'
+  },
+  deleteCollectBlogFailed: {
+    errno: 10025,
+    message: '取消收藏失败！'
+  },
 }

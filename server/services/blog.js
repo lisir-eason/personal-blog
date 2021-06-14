@@ -1,4 +1,5 @@
-const { Blog, User, LikeRelation } = require('../db/model/index')
+const { Blog, User, LikeRelation, CollectBlog } = require('../db/model/index')
+const {getCollectBlog} = require('./collection')
 
 
 const create = async ({userId, title, tags, htmlContent, rawContent}) => {
@@ -67,6 +68,10 @@ const getUserBlogInfo = async ({userId}) => {
       {
         model: LikeRelation,
         attributes: ['userId'],
+      },
+      {
+        model: CollectBlog,
+        attributes: ['userId']
       }
     ]
   })
@@ -77,7 +82,8 @@ const getUserBlogInfo = async ({userId}) => {
 
   const blogs = result.map(item => {
     const likeCount = item.dataValues.LikeRelations.length
-    return {...item.dataValues, likeCount}
+    const collectCount = item.dataValues.CollectBlogs.length
+    return {...item.dataValues, likeCount, collectCount}
   })
 
   return blogs
@@ -97,7 +103,11 @@ const getHomeBlog = async ({page, perPage}) => {
       {
         model: LikeRelation,
         attributes: ['userId'],
-      }
+      },
+      {
+        model: CollectBlog,
+        attributes: ['userId']
+      },
     ],
   })
 
@@ -109,6 +119,7 @@ const getHomeBlog = async ({page, perPage}) => {
     const { id: blogId, rawContent, tags, title, updatedAt, viewCount} = item.dataValues
     const {nickName, picture, userName} = item.dataValues.User.dataValues
     const likeCount = item.dataValues.LikeRelations.length
+    const collectCount = item.dataValues.CollectBlogs.length
     const {blocks} = JSON.parse(rawContent)
     const length = blocks.length
     const description = blocks.reduce((pre, cur, index) => {
@@ -128,12 +139,9 @@ const getHomeBlog = async ({page, perPage}) => {
       picture,
       viewCount,
       likeCount,
+      collectCount,
     }
   })
-
-  // async blogs.map(item => {
-  //   await getLiker({blogId: item.id})
-  // })
 
   return {
     count: result.count,

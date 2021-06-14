@@ -79,3 +79,39 @@ export const userLikeBlog = (params) => {
 export const unLikeBlog = (params) => {
   return api.post('/blogs/unLikeBlog', params)
 }
+
+export const getUserCollections = (params) => {
+  return api.get('/collection/getUserCollections', {params})
+}
+
+export const createCollection = (params) => {
+  return api.post('/collection/createCollection', params)
+}
+
+export const createCollectBlog = (params) => {
+  return api.post('/collection/createCollectBlog', params)
+}
+
+export const getCurrentUserCollectBlogs = () => {
+  return api.get('/collection/getCurrentUserCollectBlogs')
+}
+
+export const updateCollection = (params) => {
+  return api.post('/collection/updateCollection', params)
+}
+
+export const deleteCollection = (params) => {
+  return api.post('/collection/deleteCollection', params)
+}
+
+export const deleteCollectBlog = (params) => {
+  return api.post('/collection/deleteCollectBlog', params)
+}
+
+export const deleteCollectBlogByBlogId = (params) => {
+  return api.post('/collection/deleteCollectBlogByBlogId', params)
+}
+
+export const getBlogCollects = (params) => {
+  return api.get('/collection/getBlogCollect', {params})
+}

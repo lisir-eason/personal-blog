@@ -46,7 +46,7 @@ const getFollowers = async ({id}) => {
     include: [
       {
         model: User,
-        attributes: ['id', 'userName', 'nickName', 'picture']
+        attributes: ['id', 'userName', 'nickName', 'picture'],
       }
     ]
   })

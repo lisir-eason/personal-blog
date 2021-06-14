@@ -6,8 +6,6 @@ const LikeRelation = seq.define('LikeRelation', {
     type: Integer,
     allowNull: false,
     comment: '点赞的博客id',
-    // references: 'blogs',
-    // referencesKey: 'id',
   },
   userId: {
     type: Integer,

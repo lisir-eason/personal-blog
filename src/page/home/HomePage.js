@@ -50,7 +50,7 @@ const HomePage = () => {
             nickName: item.nickName,
             updatedAt: item.updatedAt,
             viewCount: item.viewCount,
-            collectCount: parseInt(Math.random() * 100, 10),
+            collectCount: item.collectCount,
             likeCount: item.likeCount,
             commentCount: parseInt(Math.random() * 100, 10),
           }
@@ -104,7 +104,7 @@ const HomePage = () => {
             nickName: item.nickName,
             updatedAt: item.updatedAt,
             viewCount: item.viewCount,
-            collectCount: parseInt(Math.random() * 100, 10),
+            collectCount: item.collectCount,
             likeCount: item.likeCount,
             commentCount: parseInt(Math.random() * 100, 10),
           }

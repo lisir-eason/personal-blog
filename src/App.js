@@ -16,6 +16,7 @@ const NotFoundPage = lazy(() => import('./page/notFound/NotFoundPage'))
 const SettingPage = lazy(() => import('./page/setting/SettingPage'))
 const EditPage = lazy(() => import('./page/edit/EditPage'))
 const viewPage = lazy(() => import('./page/view/viewPage'))
+const MyPage = lazy(() => import('./page/my/MyPage'))
 
 const App = () => {
   const dispatch = useDispatch()
@@ -42,6 +43,7 @@ const App = () => {
           <Route exact path='/profile/:userName' component={ProfilePage}></Route>
           <Route exact path='/focus' component={focusPage}></Route>
           <Route exact path='/setting' component={SettingPage}></Route>
+          <Route exact path='/my' component={MyPage}></Route>
           <Route exact path='/edit/:id' component={EditPage}></Route>
           <Route exact path='/view/:id' component={viewPage}></Route>
           <Route exact path='/register' component={RegisterPage}></Route>

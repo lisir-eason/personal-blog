@@ -3,6 +3,7 @@
  */
 
 const { getUserInfo, createUser, updateUser } = require('../services/user')
+const { createCollection } = require('../services/collection')
 const {
   userIsNotExist,
   userIsExist,
@@ -28,6 +29,7 @@ async function register({userName, password}) {
   }
   try {
     const user = await createUser({userName, password})
+    await createCollection({userId: user.id, collectionName: '默认文件夹'})
     return new SuccessModal({data: user})
   } catch (error) {
     console.error(error.message, error.stack)

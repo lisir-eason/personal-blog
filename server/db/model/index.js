@@ -6,6 +6,8 @@ const User = require('./user')
 const Blog = require('./blog')
 const UserRelation = require('./user-relation')
 const LikeRelation = require('./like-relation')
+const CollectBlog = require('./collect-blog')
+const Collection = require('./collection')
 
 Blog.belongsTo(User, {
   foreignKey: 'userId',
@@ -15,7 +17,7 @@ UserRelation.belongsTo(User, {
   foreignKey: 'followerId'
 })
 
-UserRelation.belongsTo(User, {
+User.hasMany(UserRelation, {
   foreignKey: 'userId'
 })
 
@@ -23,17 +25,35 @@ LikeRelation.belongsTo(User, {
   foreignKey: 'userId',
 })
 
-
 Blog.hasMany(LikeRelation, {
   foreignKey: 'blogId',
 })
-// LikeRelation.belongsTo(Blog, {
-//   foreignKey: 'blogId',
-// })
+
+Blog.hasMany(CollectBlog, {
+  foreignKey: 'blogId',
+})
+
+CollectBlog.belongsTo(Collection, {
+  foreignKey: 'collectionId'
+})
+
+CollectBlog.belongsTo(Blog, {
+  foreignKey: 'blogId'
+})
+
+CollectBlog.belongsTo(User, {
+  foreignKey: 'userId'
+})
+
+Collection.belongsTo(User, {
+  foreignKey: 'userId'
+})
 
 module.exports = {
   User,
   Blog,
   UserRelation,
-  LikeRelation
+  LikeRelation,
+  CollectBlog,
+  Collection,
 }
