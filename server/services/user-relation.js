@@ -77,7 +77,7 @@ const getFocus = async ({userId}) => {
   })
 
   if (!result) {
-    return result
+    return []
   }
 
   const focusId = result.dataValues.UserRelations.map(item => {

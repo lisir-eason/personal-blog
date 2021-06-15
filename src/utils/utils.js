@@ -118,3 +118,14 @@ export const dateFromNow = (time) => {
   moment.locale('zh-cn')
   return moment(time).fromNow()
 }
+
+export const makeTree = (source, parentId = 0) => {
+  let tree = []
+  source.map(item => {
+    if (item.replyToId === parentId) {
+      item.children = makeTree(source, item.id)
+      tree.push(item)
+    }
+  })
+  return tree
+}

@@ -13,7 +13,7 @@ import ReactHtmlParser from 'react-html-parser'
 import Tags from '../../component/Tags'
 import './viewPage.less'
 import userDefaultImg from '../../static/user.png'
-import {dateFromNow, formatDate} from '../../utils/utils'
+import {dateFromNow, formatDate, makeTree,} from '../../utils/utils'
 
 const viewPage = () => {
   const {id} = useParams()
@@ -32,6 +32,7 @@ const viewPage = () => {
   const [currentUserIsLike, setCurrentUserIsLike] = useState(false)
   const [currentUserIsCollect, setCurrentUserIsCollect] = useState(false)
   const [commentList, setCommentList] = useState([])
+  const [sourceCommentList, setSourceCommentList] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [textValue, setTextValue] = useState('')
   const dispatch = useDispatch()
@@ -42,7 +43,12 @@ const viewPage = () => {
   const getBlogComment = () => {
     getBlogCommentById({blogId: id}).then(res => {
       if (res && res.data) {
-        setCommentList(res.data.data)
+        const data = res.data.data.map(item => {
+          return {...item, showInput: false, commitLoading: false}
+        })
+        setSourceCommentList(data)
+        setCommentList(makeTree(data))
+        console.log(makeTree(data))
       }
     })
   }
@@ -176,14 +182,71 @@ const viewPage = () => {
     })
   }
 
-  const CommentList = ({ comments }) =>
-    <List
-      dataSource={comments}
-      header={`${comments.length} ${comments.length > 1 ? '评论' : '评论'}`}
-      itemLayout="horizontal"
-      renderItem={item => <Comment author={item.nickName} avatar={item.picture}
-        content={<p>{item.content}</p>} datetime={dateFromNow(item.createdAt)}/>}
-    />
+  const toggleInput = (comments) => {
+    const change = sourceCommentList.map(item => {
+      if (item.id === comments.id) {
+        item.showInput = !item.showInput
+      }
+      return item
+    })
+    setCommentList(makeTree(change))
+  }
+
+  const toggleCommitLoading = (comments) => {
+    const change = sourceCommentList.map(item => {
+      if (item.id === comments.id) {
+        item.commitLoading = !item.commitLoading
+      }
+      return item
+    })
+    setCommentList(makeTree(change))
+  }
+
+  const commitComment = (comments, value) => {
+    if (!value) {
+      message.error('评论内容不能为空！')
+      return
+    }
+    toggleCommitLoading(comments)
+    const params = {
+      blogId: id,
+      content: value,
+      replyToId: comments.id
+    }
+
+    createComment(params).then(res => {
+      if (res && res.data) {
+        toggleCommitLoading(comments)
+        getBlogComment()
+      }
+    })
+  }
+
+  const CommentTree = ({ comments }) =>
+    <Comment
+      actions={comments.showInput ?
+        [<span key="comment-nested-reply-to" onClick={()=> {
+          toggleInput(comments)
+        }}>取消回复</span>,
+        <Search placeholder="回复评论" enterButton="提交" size="small"
+          loading={comments.commitLoading} onSearch={(value) => {
+            commitComment(comments, value)
+          }}/>] :
+        [<span key="comment-nested-reply-to" onClick={()=> {
+          toggleInput(comments)
+        }}>回复</span>]
+      }
+      author={comments.nickName}
+      avatar={comments.picture}
+      content={<p>{comments.content}</p>}
+      datetime={dateFromNow(comments.createdAt)}>
+      {
+        comments.children && comments.children.map(item => {
+          return <CommentTree key={item.id} comments={item} />
+        })
+      }
+    </Comment>
+
 
   const handleSubmit = () => {
     if (!userInfo) {
@@ -283,7 +346,17 @@ const viewPage = () => {
             </Fragment>
         }
         <Divider orientation="left">评论区</Divider>
-        {commentList.length > 0 && <CommentList comments={commentList} />}
+        {
+          commentList.length > 0 &&
+            <List
+              dataSource={commentList}
+              header={`${commentList.length} ${commentList.length > 1 ? '评论' : '评论'}`}
+              itemLayout="horizontal"
+              renderItem={item =>
+                <CommentTree comments={item} />
+              }
+            />
+        }
         <Comment
           avatar={
             <Avatar

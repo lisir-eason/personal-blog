@@ -52,7 +52,7 @@ const getFollower = async (userName) => {
 
 const getUserFocus = async ({userId}) => {
   const result = await getFocus({userId})
-  if (result.length) {
+  if (result) {
     return new SuccessModal({data: result})
   }
   return new ErrorModal(getFocusFailed)
