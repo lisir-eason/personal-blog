@@ -8,6 +8,7 @@ const UserRelation = require('./user-relation')
 const LikeRelation = require('./like-relation')
 const CollectBlog = require('./collect-blog')
 const Collection = require('./collection')
+const Comment = require('./comment')
 
 Blog.belongsTo(User, {
   foreignKey: 'userId',
@@ -38,6 +39,14 @@ Blog.hasMany(CollectBlog, {
   foreignKey: 'blogId',
 })
 
+Blog.hasMany(Comment, {
+  foreignKey: 'blogId',
+})
+
+Comment.belongsTo(User, {
+  foreignKey: 'userId'
+})
+
 CollectBlog.belongsTo(Collection, {
   foreignKey: 'collectionId'
 })
@@ -61,4 +70,5 @@ module.exports = {
   LikeRelation,
   CollectBlog,
   Collection,
+  Comment,
 }

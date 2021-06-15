@@ -119,4 +119,8 @@ module.exports = {
     errno: 10027,
     message: '获取关注列表失败！'
   },
+  createCommentFailed: {
+    errno: 10028,
+    message: '评论失败！'
+  },
 }

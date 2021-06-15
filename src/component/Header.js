@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Avatar, Button, Tooltip, Space, Typography, Divider, message} from 'antd'
+import {Avatar, Button, Tooltip, Space, Badge, Divider, message} from 'antd'
 import { EditFilled, LogoutOutlined} from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
 import {Link, withRouter, useLocation,} from 'react-router-dom'
@@ -94,15 +94,18 @@ const Header = ({
                 history.push(`/profile/${userInfo.userName}`)
               }}>个人主页</span>
             </li>
-            <li className="nav-item">
-              <span className={pathname === '/my' ? 'is-active' : ''} onClick={() => {
-                if (!userInfo) {
-                  dispatch({type: 'set_login_modal', payload: true})
-                  return
-                }
-                history.push('/my')
-              }}>我的</span>
-            </li>
+            <Badge count={5} size="small">
+              <li className="nav-item">
+                <span className={pathname === '/my' ? 'is-active' : ''} onClick={() => {
+                  if (!userInfo) {
+                    dispatch({type: 'set_login_modal', payload: true})
+                    return
+                  }
+                  history.push('/my')
+                }}>我的</span>
+              </li>
+            </Badge>
+
             <li className="nav-item">
               <span className={pathname === '/setting' ? 'is-active' : ''} onClick={() => {
                 if (!userInfo) {

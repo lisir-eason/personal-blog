@@ -52,7 +52,7 @@ const HomePage = () => {
             viewCount: item.viewCount,
             collectCount: item.collectCount,
             likeCount: item.likeCount,
-            commentCount: parseInt(Math.random() * 100, 10),
+            commentCount: item.commentCount,
           }
         })
         setData(list)
@@ -106,7 +106,7 @@ const HomePage = () => {
             viewCount: item.viewCount,
             collectCount: item.collectCount,
             likeCount: item.likeCount,
-            commentCount: parseInt(Math.random() * 100, 10),
+            commentCount: item.commentCount,
           }
         })
         setData(dataCopy.concat(list))

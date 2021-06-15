@@ -1,5 +1,4 @@
-const { Blog, User, LikeRelation, CollectBlog } = require('../db/model/index')
-const {getCollectBlog} = require('./collection')
+const { Blog, User, LikeRelation, CollectBlog, Comment } = require('../db/model/index')
 
 
 const create = async ({userId, title, tags, htmlContent, rawContent}) => {
@@ -116,6 +115,10 @@ const getHomeBlog = async ({page, perPage}) => {
         model: CollectBlog,
         attributes: ['userId']
       },
+      {
+        model: Comment,
+        attributes: ['id']
+      },
     ],
   })
 
@@ -128,6 +131,7 @@ const getHomeBlog = async ({page, perPage}) => {
     const {nickName, picture, userName} = item.dataValues.User.dataValues
     const likeCount = item.dataValues.LikeRelations.length
     const collectCount = item.dataValues.CollectBlogs.length
+    const commentCount = item.dataValues.Comments.length
     const {blocks} = JSON.parse(rawContent)
     const length = blocks.length
     const description = blocks.reduce((pre, cur, index) => {
@@ -148,6 +152,7 @@ const getHomeBlog = async ({page, perPage}) => {
       viewCount,
       likeCount,
       collectCount,
+      commentCount,
     }
   })
 

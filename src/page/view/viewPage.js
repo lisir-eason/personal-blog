@@ -3,15 +3,17 @@ import {useParams, useHistory} from 'react-router-dom'
 import {getBlogInfoById, increaseViewCount, getBlogLikers,
   userLikeBlog, unLikeBlog, getUserCollections, createCollection,
   createCollectBlog, getBlogCollects, deleteCollectBlogByBlogId,
+  createComment, getBlogCommentById,
 } from '../../api/index'
-import { Avatar, Image, Button, Skeleton, Space, Tooltip, Modal, Checkbox,
-  Row, Col, Input, message, } from 'antd'
+import { Avatar, Button, Skeleton, Tooltip, Modal, Checkbox,
+  Row, Col, Input, message, Comment, Form, List, Divider } from 'antd'
 import { LikeTwoTone, StarTwoTone, EyeOutlined } from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
-import moment from 'moment'
 import Tags from '../../component/Tags'
 import './viewPage.less'
+import userDefaultImg from '../../static/user.png'
+import {dateFromNow, formatDate} from '../../utils/utils'
 
 const viewPage = () => {
   const {id} = useParams()
@@ -29,9 +31,21 @@ const viewPage = () => {
   const userInfo = useSelector(state => state.userInfo)
   const [currentUserIsLike, setCurrentUserIsLike] = useState(false)
   const [currentUserIsCollect, setCurrentUserIsCollect] = useState(false)
+  const [commentList, setCommentList] = useState([])
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [textValue, setTextValue] = useState('')
   const dispatch = useDispatch()
   const {push} = useHistory()
   const { Search } = Input
+  const { TextArea } = Input
+
+  const getBlogComment = () => {
+    getBlogCommentById({blogId: id}).then(res => {
+      if (res && res.data) {
+        setCommentList(res.data.data)
+      }
+    })
+  }
 
   useEffect(() => {
     getBlogInfoById(id).then(res => {
@@ -50,6 +64,7 @@ const viewPage = () => {
         setCollectorCount(res.data.data.length)
       }
     })
+    getBlogComment()
   }, [id])
 
   useEffect(() => {
@@ -161,6 +176,44 @@ const viewPage = () => {
     })
   }
 
+  const CommentList = ({ comments }) =>
+    <List
+      dataSource={comments}
+      header={`${comments.length} ${comments.length > 1 ? '评论' : '评论'}`}
+      itemLayout="horizontal"
+      renderItem={item => <Comment author={item.nickName} avatar={item.picture}
+        content={<p>{item.content}</p>} datetime={dateFromNow(item.createdAt)}/>}
+    />
+
+  const handleSubmit = () => {
+    if (!userInfo) {
+      dispatch({type: 'set_login_modal', payload: true})
+      return
+    }
+    if (!textValue) {
+      message.error('评论内容不能为空！')
+      return
+    }
+    setSubmitLoading(true)
+    const params = {
+      blogId: id,
+      content: textValue,
+      replyToId: 0
+    }
+
+    createComment(params).then(res => {
+      if (res && res.data) {
+        setSubmitLoading(false)
+        setTextValue('')
+        getBlogComment()
+      }
+    })
+  }
+
+  const handleChange = e => {
+    setTextValue(e.target.value)
+  }
+
 
   return (
     <div>
@@ -183,7 +236,7 @@ const viewPage = () => {
                 <span className='author-user' onClick={() => {
                   push(`/profile/${blogInfo.user.userName}`)
                 }}>{blogInfo.user.nickName}</span>
-                <span className="article-date">{moment(blogInfo.blog.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+                <span className="article-date">{formatDate(blogInfo.blog.updatedAt)}</span>
                 <div className='article-count-box'>
                   <Tooltip title="">
                     <EyeOutlined className="article-count-curser-default" onClick={() => {
@@ -229,6 +282,28 @@ const viewPage = () => {
               <Skeleton active avatar paragraph={{rows:8}}/>
             </Fragment>
         }
+        <Divider orientation="left">评论区</Divider>
+        {commentList.length > 0 && <CommentList comments={commentList} />}
+        <Comment
+          avatar={
+            <Avatar
+              src={userInfo ? userInfo.picture : userDefaultImg}
+              alt={userInfo ? userInfo.nickName : '游客'}
+            />
+          }
+          content={
+            <Fragment>
+              <Form.Item>
+                <TextArea rows={4} onChange={handleChange} value={textValue} />
+              </Form.Item>
+              <Form.Item>
+                <Button htmlType="submit" loading={submitLoading} onClick={handleSubmit} type="primary">
+                  添加评论
+                </Button>
+              </Form.Item>
+            </Fragment>
+          }
+        />
       </div>
       <Modal
         title="收藏博客"

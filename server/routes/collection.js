@@ -49,7 +49,7 @@ router.post('/deleteCollectBlogByBlogId', loginCheck, async (ctx, next) => {
   ctx.body = await deleteCollectBlogByBlogId({blogId, userId})
 })
 
-router.get('/getBlogCollect', loginCheck, async (ctx, next) => {
+router.get('/getBlogCollect', async (ctx, next) => {
   const {blogId} = ctx.query
   ctx.body = await getBlogCollect({blogId: parseInt(blogId, 10)})
 })

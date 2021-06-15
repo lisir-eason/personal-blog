@@ -124,3 +124,11 @@ export const getBlogCollects = (params) => {
   return api.get('/collection/getBlogCollect', {params})
 }
 
+export const createComment = (params) => {
+  return api.post('/comment/createComment', params)
+}
+
+export const getBlogCommentById = (params) => {
+  return api.get('/comment/getBlogComment', {params})
+}
+
