@@ -1,6 +1,6 @@
 const UserRelation = require('../db/model/user-relation')
 const User = require('../db/model/user')
-
+const {getUserInfo} = require('./user')
 
 const create = async ({id, userId}) => {
   const result = await UserRelation.create({
@@ -60,9 +60,43 @@ const getFollowers = async ({id}) => {
   })
 }
 
+const getFocus = async ({userId}) => {
+  const result = await User.findOne({
+    where: {
+      id: userId
+    },
+    include: [
+      {
+        model: UserRelation,
+        where: {
+          followerId: userId
+        },
+        attributes: ['userId']
+      }
+    ]
+  })
+
+  if (!result) {
+    return result
+  }
+
+  const focusId = result.dataValues.UserRelations.map(item => {
+    return item.dataValues
+  })
+
+  const list = await Promise.all(
+    focusId.map(async item => {
+      return await getUserInfo({id: item.userId})
+    })
+  )
+
+  return list
+}
+
 module.exports = {
   create,
   deleteRelation,
   getRelation,
   getFollowers,
+  getFocus,
 }

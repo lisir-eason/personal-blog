@@ -111,4 +111,12 @@ module.exports = {
     errno: 10025,
     message: '取消收藏失败！'
   },
+  deleteBlogFailed: {
+    errno: 10026,
+    message: '删除微博失败！'
+  },
+  getFocusFailed: {
+    errno: 10027,
+    message: '获取关注列表失败！'
+  },
 }

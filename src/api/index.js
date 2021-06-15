@@ -32,6 +32,10 @@ export const createNewBlog = (params) => {
   return api.post('/blogs/createBlog', params)
 }
 
+export const deleteUserBlog = (params) => {
+  return api.post('/blogs/deleteUserBlog', params)
+}
+
 export const getBlogInfoById = (id) => {
   return api.get(`/blogs/getBlog/${id}`)
 }
@@ -66,6 +70,10 @@ export const isFollowUser = (params) => {
 
 export const getUserFollower = (params) => {
   return api.get('/userRelation/getFollower', {params})
+}
+
+export const getCurrentUserFocus = () => {
+  return api.get('/userRelation/getCurrentUserFocus')
 }
 
 export const increaseViewCount = (params) => {
@@ -115,3 +123,4 @@ export const deleteCollectBlogByBlogId = (params) => {
 export const getBlogCollects = (params) => {
   return api.get('/collection/getBlogCollect', {params})
 }
+

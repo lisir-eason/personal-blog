@@ -1,14 +1,18 @@
 import {useEffect, useState, Fragment} from 'react'
 import { useParams, useHistory} from 'react-router-dom'
 import {Timeline, Statistic, Row, Col, Divider, Skeleton,
-  Descriptions, Image, Space, Tooltip, message, Avatar} from 'antd'
+  Descriptions, Image, Space, Tooltip, message, Avatar, Modal,
+} from 'antd'
 import {useSelector, useDispatch} from 'react-redux'
 import {getUserBlogs} from '../../api/index'
 import { LikeOutlined, StarOutlined, ReadOutlined, EyeOutlined,
-  GithubOutlined, QqOutlined, WechatOutlined, HeartTwoTone, SettingFilled} from '@ant-design/icons'
+  GithubOutlined, QqOutlined, WechatOutlined, HeartTwoTone,
+  SettingFilled, DeleteTwoTone, ExclamationCircleOutlined,
+} from '@ant-design/icons'
 import moment from 'moment'
 import EmptyBox from '../../component/EmptyBox'
-import {followUser, getUserFollower, unFollowUser,} from '../../api/index'
+import {followUser, getUserFollower, unFollowUser, deleteUserBlog,
+} from '../../api/index'
 import './ProfilePage.less'
 
 const ProfilePage = () => {
@@ -21,6 +25,7 @@ const ProfilePage = () => {
   const [visitUserFollower, setVisitUserFollower] = useState([])
   const userInfo = useSelector(state => state.userInfo)
   const genders = ['', '男', '女', '保密']
+  const {confirm} = Modal
 
 
   const getVisitUserFollower = (params) => {
@@ -31,7 +36,7 @@ const ProfilePage = () => {
     })
   }
 
-  useEffect(() => {
+  const getBlogsForVisitUser = () => {
     getUserBlogs({userName}).then(res => {
       if (res) {
         setBlogs(res.data.data.blogs)
@@ -43,6 +48,10 @@ const ProfilePage = () => {
       }
       setLoading(false)
     })
+  }
+
+  useEffect(() => {
+    getBlogsForVisitUser()
   }, [userName])
 
 
@@ -113,6 +122,26 @@ const ProfilePage = () => {
     return blogList.reduce((pre, cur) => {
       return pre + cur.collectCount
     }, 0)
+  }
+
+  const showDeleteCollectConfirm = (ele) => {
+    confirm({
+      title: '删除',
+      icon: <ExclamationCircleOutlined />,
+      content: `您确定删除“ ${ele.title} ”吗？`,
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        deleteUserBlog({id: ele.id}).then(res => {
+          if (res && res.data) {
+            message.success('删除成功！')
+            getBlogsForVisitUser()
+          }
+        })
+      },
+      onCancel() {},
+    })
   }
 
   return (
@@ -262,6 +291,12 @@ const ProfilePage = () => {
                          <span className="timeline-blog-create">
                            {moment(blog.createdAt).format('YYYY-MM-DD')}
                          </span>
+                         {
+                           userInfo && userInfo.id === visitUserInfo.id &&
+                            <DeleteTwoTone twoToneColor='#ff4d4f' onClick={() => {
+                              showDeleteCollectConfirm(blog)
+                            }}/>
+                         }
                        </Timeline.Item>
                      })
                    }

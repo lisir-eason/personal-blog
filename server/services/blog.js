@@ -14,6 +14,14 @@ const update = async ({id, ...others}) => {
   return result[0] > 0
 }
 
+const deleteBlog = async ({userId, blogId}) => {
+  const result = await Blog.destroy({
+    where: {userId, id: blogId}
+  })
+  return result > 0
+}
+
+
 const getBlogInfo = async ({id}) => {
   const where = {
     id
@@ -153,6 +161,7 @@ const getHomeBlog = async ({page, perPage}) => {
 module.exports = {
   create,
   update,
+  deleteBlog,
   getBlogInfo,
   getUserBlogInfo,
   getHomeBlog,

@@ -1,5 +1,7 @@
-const { create, getRelation, getFollowers, deleteRelation,} = require('../services/user-relation')
-const {followFailed, noFollowRelation, unFollowFailed} = require('../model/errNum')
+const { create, getRelation, getFollowers, deleteRelation,
+  getFocus,} = require('../services/user-relation')
+const {followFailed, noFollowRelation, unFollowFailed,
+  getFollowerFailed, getFocusFailed,} = require('../model/errNum')
 const {SuccessModal, ErrorModal} = require('../model/resModal')
 const {getUserInfo} = require('../services/user')
 
@@ -48,9 +50,19 @@ const getFollower = async (userName) => {
 }
 
 
+const getUserFocus = async ({userId}) => {
+  const result = await getFocus({userId})
+  if (result.length) {
+    return new SuccessModal({data: result})
+  }
+  return new ErrorModal(getFocusFailed)
+}
+
+
 module.exports ={
   followPeople,
   removeFollow,
   isFollow,
   getFollower,
+  getUserFocus,
 }

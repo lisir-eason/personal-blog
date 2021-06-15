@@ -97,7 +97,7 @@ const MyPage = () => {
 
   const showDeleteConfirm = () =>{
     confirm({
-      title: '删除?',
+      title: '删除',
       icon: <ExclamationCircleOutlined />,
       content: `您确定删除“ ${currentEditCollection.collectionName} ”及其文件夹里的博客吗？`,
       okText: '确定',
@@ -112,7 +112,7 @@ const MyPage = () => {
 
   const showDeleteCollectConfirm = (ele) => {
     confirm({
-      title: '删除?',
+      title: '删除',
       icon: <ExclamationCircleOutlined />,
       content: `您确定删除“ ${ele.BlogTitle} ”吗？`,
       okText: '确定',

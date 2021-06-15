@@ -1,6 +1,8 @@
 const router = require('koa-router')()
 const loginCheck = require('../middlewares/loginCheck')
-const {followPeople, isFollow, getFollower, removeFollow} = require('../controller/user-relation')
+const {followPeople, isFollow, getFollower, removeFollow,
+  getUserFocus,
+} = require('../controller/user-relation')
 
 
 router.prefix('/userRelation')
@@ -23,6 +25,11 @@ router.get('/isFollow', loginCheck, async function (ctx, next) {
 router.get('/getFollower', async function (ctx, next) {
   const {userName} = ctx.query
   ctx.body = await getFollower(userName)
+})
+
+router.get('/getCurrentUserFocus', async function (ctx, next) {
+  const {id: userId} = ctx.session.userInfo
+  ctx.body = await getUserFocus({userId})
 })
 
 

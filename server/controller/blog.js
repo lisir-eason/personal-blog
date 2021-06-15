@@ -1,4 +1,4 @@
-const {create, update, getBlogInfo, getUserBlogInfo} = require('../services/blog')
+const {create, update, getBlogInfo, getUserBlogInfo, deleteBlog,} = require('../services/blog')
 const {getLiker} = require('../services/like-relation')
 const {getHomePageBlogs} = require('../cache/blog')
 const {getUserInfo} = require('../services/user')
@@ -10,6 +10,7 @@ const {
   updateBlogFailed,
   getHomeBlogFailed,
   getLikerFailed,
+  deleteBlogFailed,
 } = require('../model/errNum')
 const { SuccessModal, ErrorModal } = require('../model/resModal')
 
@@ -80,6 +81,14 @@ const getBlogLiker = async ({blogId}) => {
   return new ErrorModal(getLikerFailed)
 }
 
+const deleteUserBlog = async({userId, blogId}) => {
+  const result = await deleteBlog({userId, blogId})
+  if (result) {
+    return new SuccessModal({data: '删除成功！'})
+  }
+  return new ErrorModal(deleteBlogFailed)
+}
+
 module.exports = {
   createBlog,
   getBlog,
@@ -88,4 +97,5 @@ module.exports = {
   updateBlog,
   increaseViewCount,
   getBlogLiker,
+  deleteUserBlog,
 }

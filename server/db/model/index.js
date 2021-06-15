@@ -17,8 +17,13 @@ UserRelation.belongsTo(User, {
   foreignKey: 'followerId'
 })
 
+
 User.hasMany(UserRelation, {
   foreignKey: 'userId'
+})
+
+User.hasMany(UserRelation, {
+  foreignKey: 'followerId'
 })
 
 LikeRelation.belongsTo(User, {
