@@ -183,12 +183,19 @@ const viewPage = () => {
   }
 
   const toggleInput = (comments) => {
+    if (!userInfo) {
+      dispatch({type: 'set_login_modal', payload: true})
+      return
+    }
     const change = sourceCommentList.map(item => {
       if (item.id === comments.id) {
         item.showInput = !item.showInput
+      } else {
+        item.showInput = false
       }
       return item
     })
+    setSourceCommentList(change)
     setCommentList(makeTree(change))
   }
 
@@ -196,9 +203,12 @@ const viewPage = () => {
     const change = sourceCommentList.map(item => {
       if (item.id === comments.id) {
         item.commitLoading = !item.commitLoading
+      } else {
+        item.commitLoading = false
       }
       return item
     })
+    setSourceCommentList(change)
     setCommentList(makeTree(change))
   }
 
@@ -217,6 +227,7 @@ const viewPage = () => {
     createComment(params).then(res => {
       if (res && res.data) {
         toggleCommitLoading(comments)
+        toggleInput(comments)
         getBlogComment()
       }
     })
@@ -228,7 +239,7 @@ const viewPage = () => {
         [<span key="comment-nested-reply-to" onClick={()=> {
           toggleInput(comments)
         }}>取消回复</span>,
-        <Search placeholder="回复评论" enterButton="提交" size="small"
+        <Search enterButton="提交" size="small"
           loading={comments.commitLoading} onSearch={(value) => {
             commitComment(comments, value)
           }}/>] :
