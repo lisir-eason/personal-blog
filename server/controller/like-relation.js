@@ -1,5 +1,4 @@
 const {createLiker, deleteLiker,} = require('../services/like-relation')
-
 const {
   likeBlogFailed,
 } = require('../model/errNum')

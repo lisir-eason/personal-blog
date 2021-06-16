@@ -3,7 +3,7 @@ import {Avatar, Button, Tooltip, Space, Badge, Divider, message} from 'antd'
 import { EditFilled, LogoutOutlined} from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
 import {Link, withRouter, useLocation,} from 'react-router-dom'
-import {logout, createNewBlog, updateBlogById} from '../api/index'
+import {logout, createNewBlog, updateBlogById, getCurrentUserNotification} from '../api/index'
 import './Header.less'
 import userDefaultImg from '../static/user.png'
 
@@ -13,6 +13,7 @@ const Header = ({
 }) => {
   const userInfo = useSelector(state => state.userInfo)
   const editorInfo = useSelector(state => state.editorInfo)
+  const notification = useSelector(state => state.notification)
   const dispatch = useDispatch()
   const {id, title, tags, rawContent, htmlContent, isSave} = editorInfo
   const {pathname} = useLocation()
@@ -24,6 +25,7 @@ const Header = ({
       }
     })
   }
+
   const postBlog = () => {
     if (!isSave) {
       message.error('请先按ctrl+s保存后再点击发布！')
@@ -65,6 +67,16 @@ const Header = ({
     }
   }
 
+  useEffect(() => {
+    if (userInfo) {
+      getCurrentUserNotification().then(result => {
+        if (result && result.data) {
+          dispatch({type: 'set_notification_info', payload: result.data.data})
+        }
+      })
+    }
+  }, [pathname])
+
   return (
     <div className='header-container'>
       <header className="header-box">
@@ -94,7 +106,7 @@ const Header = ({
                 history.push(`/profile/${userInfo.userName}`)
               }}>个人主页</span>
             </li>
-            <Badge count={5} size="small">
+            <Badge count={notification.length} size="small">
               <li className="nav-item">
                 <span className={pathname === '/my' ? 'is-active' : ''} onClick={() => {
                   if (!userInfo) {

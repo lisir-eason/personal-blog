@@ -8,5 +8,6 @@ module.exports = {
   String: DataTypes.STRING, // VARCHAR(255)
   Text: DataTypes.TEXT, // TEXT
   Integer: DataTypes.INTEGER, // INTEGER
-  Float: DataTypes.FLOAT // FLOAT
+  Float: DataTypes.FLOAT,
+  BOOLEAN: DataTypes.BOOLEAN, // FLOAT
 }

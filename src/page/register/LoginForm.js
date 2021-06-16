@@ -4,7 +4,7 @@ import { Form, Input, Button, Checkbox, message } from 'antd'
 import url from 'fast-url-parser'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import {withRouter} from 'react-router-dom'
-import {login} from '../../api/index'
+import {login, getCurrentUserNotification} from '../../api/index'
 
 const LoginForm = ({
   setIsLogin, history, isModal,
@@ -32,6 +32,11 @@ const LoginForm = ({
     login(params).then(res => {
       if (res && res.data.errno === 0) {
         dispatch({type: 'set_user_info', payload: res.data.data})
+        getCurrentUserNotification().then(result => {
+          if (result && result.data) {
+            dispatch({type: 'set_notification_info', payload: result.data.data})
+          }
+        })
         if (isModal) {
           dispatch({type: 'set_login_modal', payload: false})
           return

@@ -132,3 +132,14 @@ export const getBlogCommentById = (params) => {
   return api.get('/comment/getBlogComment', {params})
 }
 
+export const getCurrentUserNotification = () => {
+  return api.get('/notification/getCurrentUserNotification',)
+}
+
+export const readNotification = (params) => {
+  return api.post('/notification/readNotification', params)
+}
+
+export const readNotificationByBlogId = (params) => {
+  return api.post('/notification/readNotificationByBlogId', params)
+}

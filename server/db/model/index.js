@@ -9,6 +9,7 @@ const LikeRelation = require('./like-relation')
 const CollectBlog = require('./collect-blog')
 const Collection = require('./collection')
 const Comment = require('./comment')
+const Notification = require('./notification')
 
 Blog.belongsTo(User, {
   foreignKey: 'userId',
@@ -63,6 +64,14 @@ Collection.belongsTo(User, {
   foreignKey: 'userId'
 })
 
+Notification.belongsTo(User, {
+  foreignKey: 'creatorId'
+})
+
+Notification.belongsTo(Blog, {
+  foreignKey: 'blogId'
+})
+
 module.exports = {
   User,
   Blog,
@@ -71,4 +80,5 @@ module.exports = {
   CollectBlog,
   Collection,
   Comment,
+  Notification,
 }

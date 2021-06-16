@@ -1,25 +1,32 @@
-import { useState, useEffect } from 'react'
-import { Collapse, Divider, Modal, Input, Button, message,} from 'antd'
-import { CaretRightOutlined, DeleteOutlined, EditOutlined,
+import { useState, useEffect, Fragment } from 'react'
+import { Collapse, Modal, Input, Button, message,
+  Tabs, Badge, List, Avatar,} from 'antd'
+import { CaretRightOutlined, EditOutlined,
   ExclamationCircleOutlined, DeleteTwoTone
 } from '@ant-design/icons'
-import {Link} from 'react-router-dom'
-import {useSelector} from 'react-redux'
+import {Link, useHistory} from 'react-router-dom'
+import {useSelector, useDispatch} from 'react-redux'
 import {getUserCollections, getCurrentUserCollectBlogs, updateCollection,
-  deleteCollection, deleteCollectBlog,
+  deleteCollection, deleteCollectBlog, readNotification, getCurrentUserNotification,
 } from '../../api/index'
 import {formatDate} from '../../utils/utils'
+import EmptyBox from '../../component/EmptyBox'
+import systemImg from '../../static/system.png'
 import './My.less'
 
 const MyPage = () => {
   const { Panel } = Collapse
   const { confirm } = Modal
+  const { TabPane } = Tabs
   const [visible, setVisible] = useState(false)
   const [confirmLoading, setConfirmLoading] = useState(false)
+  const dispatch = useDispatch()
   const userInfo = useSelector(state => state.userInfo)
+  const notification = useSelector(state => state.notification)
   const [currentUserCollections, setCurrentUserCollections] = useState([])
   const [currentEditCollection, setCurrentEditCollection] = useState()
   const [newName, setNewName] = useState('')
+  const {push} = useHistory()
 
   const getCollectBlogsForUser = () => {
     getUserCollections({userId: userInfo.id}).then(res => {
@@ -43,6 +50,14 @@ const MyPage = () => {
             setCurrentUserCollections(data)
           }
         })
+      }
+    })
+  }
+
+  const getNotification = () => {
+    getCurrentUserNotification().then(result => {
+      if (result && result.data) {
+        dispatch({type: 'set_notification_info', payload: result.data.data})
       }
     })
   }
@@ -83,7 +98,6 @@ const MyPage = () => {
   const handleCancel = () => {
     setVisible(false)
   }
-
 
   const handleDelete = () => {
     deleteCollection({collectId: currentEditCollection.id}).then(res => {
@@ -130,42 +144,121 @@ const MyPage = () => {
     })
   }
 
+  const ignoreNotification = (id) => {
+    readNotification({id}).then(res => {
+      if (res && res.data) {
+        getNotification()
+      }
+    })
+  }
+
   return (
     <div>
       <div className="content-container">
-        <Divider orientation="left">收藏的博客</Divider>
-        <Collapse
-          bordered={false}
-          defaultActiveKey={['1']}
-          expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-          className="site-collapse-custom-collapse"
-        >
-          {
-            currentUserCollections.map(item => {
-              return <Panel header={`${item.collectionName}（${item.blogs.length}）`} key={item.id} className="site-collapse-custom-panel"
-                extra={<EditOutlined onClick={(e) => {
-                  editCollection(e, item)
-                }} />}>
-                <div className='collection-box'>
-                  {
-                    item.blogs.map(ele => {
-                      return <div className='collection-item' key={`${item.id}--${ele.blogId}`}>
-                        <Link to={`/view/${ele.blogId}`}>{ele.BlogTitle}</Link>
-                        <span className="collect-data">{formatDate(ele.createdAt)}</span>
-                        <DeleteTwoTone twoToneColor='#ff4d4f' onClick={() => {
-                          showDeleteCollectConfirm(ele)
-                        }}/>
-                      </div>
-                    })
-                  }
-                  {
-                    !item.blogs.length && <div className='collection-empty-item'>空文件夹...</div>
-                  }
-                </div>
-              </Panel>
-            })
-          }
-        </Collapse>
+        <Tabs defaultActiveKey="1" size="large">
+          <TabPane tab={<Fragment>消息{notification.length !== 0 && <Badge dot/>}</Fragment>} key="1">
+            {
+              notification.length !== 0 ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={notification}
+                  renderItem={item => {
+                    return <List.Item actions={[<a key="list-ignore-more" onClick={() => {
+                      ignoreNotification(item.id)
+                    }}>忽略</a>]}>
+                      {
+                        item.type === 1 &&
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar src={systemImg} />
+                            }
+                            title='系统通知'
+                            description={item.content}
+                          />
+                      }
+                      {
+                        item.type === 2 &&
+                          <List.Item.Meta
+                            avatar={
+                              <Avatar src={item.User.picture} />
+                            }
+                            title={
+                              <Fragment>
+                                <span className='notification-title' onClick={() => {
+                                  push(`/profile/${item.User.userName}`)
+                                }}>{item.User.nickName}</span>
+                                  在你的博客
+                                <span className='notification-title' onClick={() => {
+                                  push(`/view/${item.Blog.id}#comment`)
+                                }}>{item.Blog.title}</span>
+                                  中评论道：
+                              </Fragment>
+                            }
+                            description={item.content}
+                          />
+                      }
+                      {
+                        item.type === 3 &&
+                        <List.Item.Meta
+                          avatar={
+                            <Avatar src={item.User.picture} />
+                          }
+                          title={
+                            <Fragment>
+                              <span className='notification-title' onClick={() => {
+                                push(`/profile/${item.User.userName}`)
+                              }}>{item.User.nickName}</span>
+                                在博客
+                              <span className='notification-title' onClick={() => {
+                                push(`/view/${item.Blog.id}#comment`)
+                              }}>{item.Blog.title}</span>
+                                中回复道：
+                            </Fragment>
+                          }
+                          description={item.content}
+                        />
+                      }
+                    </List.Item>
+                  }}
+                /> :
+                <EmptyBox />
+            }
+          </TabPane>
+          <TabPane tab='收藏夹' key="2">
+            <Collapse
+              bordered={false}
+              defaultActiveKey={['1']}
+              expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+              className="site-collapse-custom-collapse"
+            >
+              {
+                currentUserCollections.map(item => {
+                  return <Panel header={`${item.collectionName}（${item.blogs.length}）`} key={item.id} className="site-collapse-custom-panel"
+                    extra={<EditOutlined onClick={(e) => {
+                      editCollection(e, item)
+                    }} />}>
+                    <div className='collection-box'>
+                      {
+                        item.blogs.map(ele => {
+                          return <div className='collection-item' key={`${item.id}--${ele.blogId}`}>
+                            <Link to={`/view/${ele.blogId}`}>{ele.BlogTitle}</Link>
+                            <span className="collect-data">{formatDate(ele.createdAt)}</span>
+                            <DeleteTwoTone twoToneColor='#ff4d4f' onClick={() => {
+                              showDeleteCollectConfirm(ele)
+                            }}/>
+                          </div>
+                        })
+                      }
+                      {
+                        !item.blogs.length && <div className='collection-empty-item'>空文件夹...</div>
+                      }
+                    </div>
+                  </Panel>
+                })
+              }
+            </Collapse>
+          </TabPane>
+        </Tabs>
         <Modal
           title={currentEditCollection && currentEditCollection.collectionName}
           visible={visible}

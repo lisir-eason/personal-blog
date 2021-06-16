@@ -1,12 +1,13 @@
-import {useEffect, useState, Fragment} from 'react'
-import {useParams, useHistory} from 'react-router-dom'
+import {useEffect, useState, Fragment, useRef} from 'react'
+import {useParams, useHistory, useLocation} from 'react-router-dom'
 import {getBlogInfoById, increaseViewCount, getBlogLikers,
   userLikeBlog, unLikeBlog, getUserCollections, createCollection,
   createCollectBlog, getBlogCollects, deleteCollectBlogByBlogId,
-  createComment, getBlogCommentById,
+  createComment, getBlogCommentById, readNotificationByBlogId,
+  getCurrentUserNotification,
 } from '../../api/index'
 import { Avatar, Button, Skeleton, Tooltip, Modal, Checkbox,
-  Row, Col, Input, message, Comment, Form, List, Divider } from 'antd'
+  Row, Col, Input, message, Comment, Form, List, Divider, Anchor, } from 'antd'
 import { LikeTwoTone, StarTwoTone, EyeOutlined } from '@ant-design/icons'
 import {useSelector, useDispatch} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
@@ -35,10 +36,13 @@ const viewPage = () => {
   const [sourceCommentList, setSourceCommentList] = useState([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [textValue, setTextValue] = useState('')
+  const linkToComment = useRef()
   const dispatch = useDispatch()
   const {push} = useHistory()
+  const {hash} = useLocation()
   const { Search } = Input
   const { TextArea } = Input
+  const { Link } = Anchor
 
   const getBlogComment = () => {
     getBlogCommentById({blogId: id}).then(res => {
@@ -48,7 +52,6 @@ const viewPage = () => {
         })
         setSourceCommentList(data)
         setCommentList(makeTree(data))
-        console.log(makeTree(data))
       }
     })
   }
@@ -74,6 +77,12 @@ const viewPage = () => {
   }, [id])
 
   useEffect(() => {
+    if (linkToComment.current && hash && hash === '#comment') {
+      linkToComment.current.handleClick()
+    }
+  }, [linkToComment.current])
+
+  useEffect(() => {
     if (userInfo) {
       likerList.map(item => {
         if (item.userName === userInfo.userName) {
@@ -82,6 +91,20 @@ const viewPage = () => {
       })
     }
   }, [likerList])
+
+  useEffect(() => {
+    if (userInfo) {
+      readNotificationByBlogId({blogId: id}).then(res => {
+        if (res && res.data) {
+          getCurrentUserNotification().then(result => {
+            if (result && result.data) {
+              dispatch({type: 'set_notification_info', payload: result.data.data})
+            }
+          })
+        }
+      })
+    }
+  }, [userInfo])
 
   useEffect(() => {
     if (userInfo) {
@@ -305,6 +328,7 @@ const viewPage = () => {
                     }}>编辑</Button>
                 }
               </div>
+              <Anchor className='link-to-comment'><Link ref={linkToComment} href="#comment" title="去评论区" /></Anchor>
               <div className='author-info'>
                 <Avatar size={28} src={blogInfo.user.picture} />
                 <span className='author-user' onClick={() => {
@@ -356,7 +380,7 @@ const viewPage = () => {
               <Skeleton active avatar paragraph={{rows:8}}/>
             </Fragment>
         }
-        <Divider orientation="left">评论区</Divider>
+        <Divider orientation="left" id="comment">评论区</Divider>
         {
           commentList.length > 0 &&
             <List

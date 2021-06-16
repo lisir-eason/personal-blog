@@ -1,6 +1,6 @@
 import React, {useEffect, Suspense, lazy} from 'react'
 import {BrowserRouter, Route, Switch,} from 'react-router-dom'
-import {getCurrentUser} from './api/index'
+import {getCurrentUser, getCurrentUserNotification} from './api/index'
 import {useDispatch} from 'react-redux'
 import {isNeedGetCurrentUserInfo} from './utils/utils'
 import {Spin} from 'antd'
@@ -23,8 +23,13 @@ const App = () => {
   useEffect(() => {
     if (isNeedGetCurrentUserInfo(window.location.pathname)) {
       getCurrentUser().then(res=> {
-        if (res) {
+        if (res && res.data) {
           dispatch({type: 'set_user_info', payload: res.data.data})
+          getCurrentUserNotification().then(result => {
+            if (result && result.data) {
+              dispatch({type: 'set_notification_info', payload: result.data.data})
+            }
+          })
         }
       })
     }

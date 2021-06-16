@@ -14,6 +14,7 @@ const defaultState = {
     isSave: true,
   },
   isLoginModalOpen: false,
+  notification: [],
 }
 
 export default (state = defaultState, action)=>{
@@ -39,6 +40,9 @@ export default (state = defaultState, action)=>{
     break
   case 'set_login_modal':
     state.isLoginModalOpen = action.payload
+    break
+  case 'set_notification_info':
+    state.notification = action.payload
     break
   default:
     break

@@ -5,11 +5,16 @@ const createComment = async ({userId, blogId, content, replyToId}) => {
   return result.dataValues
 }
 
-const getComments = async ({blogId}) => {
+const getComments = async ({blogId, commentId}) => {
+  const where = {}
+  if (blogId) {
+    where.blogId = blogId
+  }
+  if (commentId) {
+    where.id = commentId
+  }
   const result = await Comment.findAll({
-    where: {
-      blogId,
-    },
+    where,
     order: [
       ['updatedAt', 'DESC']
     ],

@@ -123,4 +123,12 @@ module.exports = {
     errno: 10028,
     message: '评论失败！'
   },
+  getNotificationFailed: {
+    errno: 10029,
+    message: '获取通知失败！'
+  },
+  updateNotificationFailed: {
+    errno: 10030,
+    message: '更新通知失败！'
+  },
 }

@@ -15,6 +15,7 @@ const utils = require('./routes/utils')
 const userRelation = require('./routes/user-relation')
 const collection = require('./routes/collection')
 const comment = require('./routes/comment')
+const notification = require('./routes/notification')
 // error handler
 onerror(app)
 
@@ -68,6 +69,7 @@ app.use(utils.routes(), utils.allowedMethods())
 app.use(userRelation.routes(), userRelation.allowedMethods())
 app.use(collection.routes(), collection.allowedMethods())
 app.use(comment.routes(), comment.allowedMethods())
+app.use(notification.routes(), notification.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

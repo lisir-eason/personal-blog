@@ -1,9 +1,6 @@
-/**
- * @description user的controller
- */
-
 const { getUserInfo, createUser, updateUser } = require('../services/user')
 const { createCollection } = require('../services/collection')
+const { createNotification } = require('../services/notification')
 const {
   userIsNotExist,
   userIsExist,
@@ -30,6 +27,8 @@ async function register({userName, password}) {
   try {
     const user = await createUser({userName, password})
     await createCollection({userId: user.id, collectionName: '默认文件夹'})
+    await createNotification({
+      userId: user.id, type: 1, content: '欢迎注册！'})
     return new SuccessModal({data: user})
   } catch (error) {
     console.error(error.message, error.stack)
