@@ -43,7 +43,7 @@ const getNotification = async ({userId}) => {
 
 const updateNotification = async (where, newData) => {
   const result = await Notification.update(newData, {where})
-  return result[0] > 0
+  return result.length > 0
 }
 
 

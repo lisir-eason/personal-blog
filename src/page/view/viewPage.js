@@ -13,6 +13,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import ReactHtmlParser from 'react-html-parser'
 import Tags from '../../component/Tags'
 import './viewPage.less'
+import 'braft-editor/dist/output.css'
 import userDefaultImg from '../../static/user.png'
 import {dateFromNow, formatDate, makeTree,} from '../../utils/utils'
 
