@@ -70,7 +70,7 @@ const getUserBlogInfo = async ({userId}) => {
       userId
     },
     attributes: ['id', 'tags', 'title', 'createdAt', 'updatedAt', 'viewCount'],
-    order: [['createdAt']],
+    order: [['createdAt', 'DESC']],
     include: [
       {
         model: LikeRelation,

@@ -196,6 +196,10 @@ const viewPage = () => {
   }
 
   const createUserCollection = () =>{
+    if (!newCollectionName) {
+      message.error('文件夹名不能为空！')
+      return
+    }
     setCreateLoading(true)
     createCollection({collectionName: newCollectionName}).then(res => {
       if (res && res.data) {
