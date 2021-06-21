@@ -3,7 +3,7 @@
  */
 
 const { User } = require('../db/model/index')
-const {defaultUserImg, genRandomPic} = require('../conf/proConf')
+const {genRandomPic} = require('../conf/proConf')
 
 async function getUserInfo({userName, password, id}) {
   let where = { }
@@ -25,9 +25,6 @@ async function getUserInfo({userName, password, id}) {
 
   if (!user) {
     return user
-  }
-  if (!user.dataValues.picture) {
-    user.dataValues.picture = defaultUserImg
   }
 
   return user.dataValues
