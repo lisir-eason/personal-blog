@@ -171,7 +171,6 @@ const HomePage = () => {
       </div>
       <div className='records-box'>
         <a href="https://beian.miit.gov.cn" target="_black">蜀ICP备2021015193号-1</a>
-
       </div>
     </Fragment>
   )

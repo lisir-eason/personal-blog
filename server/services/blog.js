@@ -97,6 +97,7 @@ const getUserBlogInfo = async ({userId}) => {
 }
 
 const getHomeBlog = async ({page, perPage}) => {
+  const amount = await Blog.count({})
   const result = await Blog.findAndCountAll({
     attributes: ['id', 'rawContent', 'tags', 'title', 'updatedAt', 'viewCount'],
     order: [['updatedAt', 'DESC']],
@@ -157,7 +158,7 @@ const getHomeBlog = async ({page, perPage}) => {
   })
 
   return {
-    count: result.count,
+    count: amount,
     list: blogs
   }
 
